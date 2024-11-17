@@ -53,9 +53,9 @@ function DrawerListAction({ actionMeta }) {
 	return (
 		<div
 			onClick={handleDrawerClick}
-			className="p-2 pb-4 flex flex-col cursor-pointer"
+			className="flex flex-col cursor-pointer"
 		>
-			<div className="flex flex-row">
+			<div className={`flex flex-row p-3 rounded-t-md ${expandedDrawerNav === actionMeta.id && 'bg-[#203254]'}`}>
 				<div>{actionMeta.icon}</div>
 				<div className="flex flex-1 justify-between">
 					<p className="text-xs pl-4 text-[#98A2B3]">{actionMeta.title}</p>
@@ -82,7 +82,7 @@ function DrawerListAction({ actionMeta }) {
 
 function DrawerListActionChildren({ listOfChildren }) {
 	return (
-		<div className="mt-4 bg-[#1D2739] rounded-sm">
+		<div className="bg-[#1D2739] rounded-b-md">
 			{listOfChildren.map((child) => (
 				<p key={child.title} className="text-xs text-[#98A2B3] pl-8 p-2">
 					{child.title}
