@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useAppStore } from "../../store";
 
-export default function DrawerNav() {
+function DrawerNav() {
 	return (
 		<div className="w-50 bg-[#101928] p-8 pr-4 pl-4 pb-0 overflow-y-auto flex flex-col">
 			<div className="flex place-content-center">
@@ -91,6 +91,8 @@ function DrawerListActionChildren({ listOfChildren }) {
 		</div>
 	);
 }
+
+export default DrawerNav
 
 const ICON_SIZE = 16;
 const ICON_COLOR = "#98A2B3";
