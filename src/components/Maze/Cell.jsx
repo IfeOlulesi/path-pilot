@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 import { useMemo } from "react";
+import { BoxGeometry } from "three";
 
 export default function Cell({ position, type, onClick }) {
 	const color = useMemo(() => {
@@ -20,9 +21,18 @@ export default function Cell({ position, type, onClick }) {
 	}, [type]);
 
 	return (
-		<mesh position={position}>
-			<boxGeometry args={[1, 0.1, 1]} />
-			<meshStandardMaterial color={color} />
-		</mesh>
+		<group position={position}>
+			{/* Main cell mesh */}
+			<mesh>
+				<boxGeometry args={[1, 0.1, 1]} />
+				<meshStandardMaterial color={color} />
+			</mesh>
+
+			{/* Border mesh */}
+			<lineSegments>
+				<edgesGeometry args={[new BoxGeometry(1, 0.1, 1)]} />
+				<lineBasicMaterial color="black" />
+			</lineSegments>
+		</group>
 	);
 }

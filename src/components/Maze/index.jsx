@@ -26,7 +26,7 @@ export default function Maze() {
 				const adjustedColValue = col - COL_ADJUSTMENT_FACTOR;
 				const cellPos = [adjustedColValue, 0, adjustedRowValue];
 				rowArr.push(
-					<Cell key={`${row}-${col}`} position={cellPos} type={"path"} />
+					<Cell key={`${row}-${col}`} position={cellPos} type={"none"} />
 				);
 			}
 
