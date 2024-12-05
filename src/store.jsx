@@ -1,15 +1,21 @@
 import { create } from "zustand";
 
 export const useAppStore = create((set) => ({
+	// constants
+	DRAWER_WIDTH: 200,
+	NAVBAR_HEIGHT: 65,
+  CELL_WIDTH: 20, // infer that each cell is a square
+
+	// variables
 	expandedDrawerNav: null,
 
-	mazeRows: 20,
-	mazeCols: 30,
+	// mazeRows: 20,
+	// mazeCols: 30,
 	startPos: null,
 	endPos: null,
 	mazeData: [],
 
-  currentTool: "wall",
+	currentTool: "wall",
 
 	// actions
 	expandDrawerNav: (navId) =>
@@ -25,12 +31,12 @@ export const useAppStore = create((set) => ({
 			};
 		}),
 
-	initializeMaze: () =>
-		set((state) => {
-			const newMazeData = Array(state.mazeRows)
+	initializeMaze: (mazeRows, mazeCols) =>
+		set(() => {
+			const newMazeData = Array(mazeRows)
 				.fill()
 				.map((_, row) =>
-					Array(state.mazeCols)
+					Array(mazeCols)
 						.fill()
 						.map((_, col) => ({
 							type: "none",
@@ -44,8 +50,8 @@ export const useAppStore = create((set) => ({
 	updateCell: (row, col, updates) =>
 		set((state) => {
 			const newMazeData = [...state.mazeData];
-      console.log(row, col)
-      console.log(updates)
+			console.log(row, col);
+			console.log(updates);
 			newMazeData[row][col] = { ...newMazeData[row][col], ...updates };
 			return { mazeData: newMazeData };
 		}),

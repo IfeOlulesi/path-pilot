@@ -1,8 +1,9 @@
 /* eslint-disable react/no-unknown-property */
 import { useMemo } from "react";
-import { BoxGeometry } from "three";
+import { Rect } from "react-konva";
+import PropTypes from "prop-types";
 
-export default function Cell({ position, type, onClick }) {
+export default function Cell({ xPos, yPos, type, onClick }) {
 	const color = useMemo(() => {
 		switch (type) {
 			case "wall":
@@ -21,18 +22,22 @@ export default function Cell({ position, type, onClick }) {
 	}, [type]);
 
 	return (
-		<group position={position} onClick={onClick} >
-			{/* Main cell mesh */}
-			<mesh>
-				<boxGeometry args={[1, 0.1, 1]} />
-				<meshStandardMaterial color={color} />
-			</mesh>
-
-			{/* Border mesh */}
-			<lineSegments>
-				<edgesGeometry args={[new BoxGeometry(1, 0.1, 1)]} />
-				<lineBasicMaterial color="black" />
-			</lineSegments>
-		</group>
+		<Rect
+			x={xPos}
+			y={yPos}
+			width={20}
+			height={20}
+			fill={color}
+			onClick={onClick}
+      stroke={'black'}
+      strokeWidth={0.2}
+		/>
 	);
 }
+
+Cell.propTypes = {
+	xPos: PropTypes.number.isRequired,
+	yPos: PropTypes.number.isRequired,
+	type: PropTypes.string.isRequired,
+	onClick: PropTypes.func,
+};
