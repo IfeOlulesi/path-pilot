@@ -21,7 +21,7 @@ export default function Cell({ position, type, onClick }) {
 	}, [type]);
 
 	return (
-		<group position={position}>
+		<group position={position} onClick={onClick} >
 			{/* Main cell mesh */}
 			<mesh>
 				<boxGeometry args={[1, 0.1, 1]} />

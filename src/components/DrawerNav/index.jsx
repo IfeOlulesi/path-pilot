@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import pathPilotLogo from "../../assets/path-pilot.svg";
 import {
 	Cpu,
@@ -51,11 +52,12 @@ function DrawerListAction({ actionMeta }) {
 	}
 
 	return (
-		<div
-			onClick={handleDrawerClick}
-			className="flex flex-col cursor-pointer"
-		>
-			<div className={`flex flex-row p-3 rounded-t-md ${expandedDrawerNav === actionMeta.id && 'bg-[#203254]'}`}>
+		<div onClick={handleDrawerClick} className="flex flex-col cursor-pointer">
+			<div
+				className={`flex flex-row p-3 rounded-t-md ${
+					expandedDrawerNav === actionMeta.id && "bg-[#203254]"
+				}`}
+			>
 				<div>{actionMeta.icon}</div>
 				<div className="flex flex-1 justify-between">
 					<p className="text-xs pl-4 text-[#98A2B3]">{actionMeta.title}</p>
@@ -83,16 +85,16 @@ function DrawerListAction({ actionMeta }) {
 function DrawerListActionChildren({ listOfChildren }) {
 	return (
 		<div className="bg-[#1D2739] rounded-b-md">
-			{listOfChildren.map((child) => (
-				<p key={child.title} className="text-xs text-[#98A2B3] pl-8 p-2">
-					{child.title}
-				</p>
-			))}
+			{listOfChildren &&
+				listOfChildren.map((child) => (
+					<p key={child.title} className="text-xs text-[#98A2B3] pl-8 p-2">
+						{child.title}
+					</p>
+				))}
 		</div>
 	);
 }
-
-export default DrawerNav
+export default DrawerNav;
 
 const ICON_SIZE = 16;
 const ICON_COLOR = "#98A2B3";
@@ -197,3 +199,22 @@ const BOTTOM_NAV_ACTIONS = [
 		icon: <UsersRound color={ICON_COLOR} size={ICON_SIZE} />,
 	},
 ];
+
+DrawerListAction.propTypes = {
+	actionMeta: PropTypes.shape({
+		id: PropTypes.number,
+		expand: PropTypes.bool.isRequired,
+		title: PropTypes.string.isRequired,
+		icon: PropTypes.element,
+		children: PropTypes.arrayOf(
+			PropTypes.shape({
+				title: PropTypes.string.isRequired,
+				icon: PropTypes.element.isRequired,
+			})
+		),
+	}).isRequired,
+};
+
+DrawerListActionChildren.propTypes = {
+	listOfChildren: PropTypes.array.isRequired,
+};
