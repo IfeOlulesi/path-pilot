@@ -1,17 +1,11 @@
-// import { Canvas } from "@react-three/fiber";
-import Cell from "./Cell";
-// import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
-// import MazeLights from "./MazeLights";
-// import MazePlane from "./MazePlane";
+import Cell from "./Cell"; 
 import { useCallback, useEffect, useMemo } from "react";
 import { useAppStore } from "../../store";
 
 import { Stage, Layer } from "react-konva";
 
 export default function Maze() {
-	const {
-		// mazeRows,
-		// mazeCols,
+	const { 
 		mazeData,
 		updateCell,
 		DRAWER_WIDTH,
@@ -59,8 +53,8 @@ export default function Maze() {
 							xPos={xPos}
 							yPos={yPos}
 							key={`${row}-${col}`}
-							onClick={(e) => {
-								e.stopPropagation();
+							onClick={() => {
+								// e.stopPropagation();
 								handleCellClick(row, col);
 							}}
 						/>
@@ -80,7 +74,6 @@ export default function Maze() {
 			<Stage
 				width={MAZE_WIDTH}
 				height={MAZE_HEIGHT}
-				// style={{ transform: "translate(-50%, -50%)" }}
 			>
 				<Layer>{cells}</Layer>
 			</Stage>
