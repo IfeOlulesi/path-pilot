@@ -8,9 +8,9 @@ export default function Cell({ xPos, yPos, type, onClick }) {
 		switch (type) {
 			case "wall":
 				return "#1f2937";
-			case "start":
+			case "begin":
 				return "#22c55e";
-			case "end":
+			case "finish":
 				return "#ef4444";
 			case "path":
 				return "#3b82f6";

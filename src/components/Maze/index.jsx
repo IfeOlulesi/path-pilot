@@ -8,6 +8,7 @@ import { Stage, Layer } from "react-konva";
 export default function Maze() {
 	const { 
 		mazeData,
+    currentTool,
 		updateCell,
 		DRAWER_WIDTH,
 		NAVBAR_HEIGHT,
@@ -29,9 +30,9 @@ export default function Maze() {
 	const handleCellClick = useCallback(
     (row, col) => {
       console.log("Handling click of cell: ", `${row}, ${col}`); 
-			updateCell(row, col, { type: "wall" });
+			updateCell(row, col, { type: currentTool });
 		},
-		[updateCell]
+		[updateCell, currentTool]
 	);
 
 	const cells = useMemo(() => {
@@ -55,7 +56,6 @@ export default function Maze() {
 							yPos={yPos}
 							key={`${row}-${col}`}
 							onClick={() => {
-								// e.stopPropagation();
 								handleCellClick(row, col);
 							}}
 						/>

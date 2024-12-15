@@ -3,13 +3,21 @@ import PathPilotLogoMini from "@/assets/PathPilotLogoMini";
 import MyFAB from "@/components/ActionsLayer/MyFAB";
 import { useState } from "react";
 import { BrickWall, Eraser, Flag, MapPin, X } from "lucide-react";
+import { tools } from "@/utils/constants";
+import { useAppStore } from "@/store";
 
 export default function ActionsLayer() {
 	const [showButtons, setShowButtons] = useState(false);
+  const { setCurrentTool } = useAppStore();
 
 	const handleShowButtons = () => {
 		console.log("showButtons: ", showButtons);
 		setShowButtons(!showButtons);
+	};
+
+	const handleClickAction = (action) => {
+		console.log("action: ", action);
+    setCurrentTool(action);
 	};
 
 	const secActions = [
@@ -18,24 +26,29 @@ export default function ActionsLayer() {
 			color: theme.lightMode.white,
 			border: true,
 			borderColor: theme.lightMode.primary,
+      tool: tools.wall,
+
 		},
 		{
 			icon: <Eraser color={theme.lightMode.primary} size={20} />,
 			color: theme.lightMode.white,
 			border: true,
 			borderColor: theme.lightMode.primary,
+      tool: tools.eraser,
 		},
 		{
 			icon: <MapPin color={theme.lightMode.primary} size={20} />,
 			color: theme.lightMode.white,
 			border: true,
 			borderColor: theme.lightMode.primary,
+      tool: tools.begin,
 		},
 		{
 			icon: <Flag color={theme.lightMode.primary} size={20} />,
 			color: theme.lightMode.white,
 			border: true,
 			borderColor: theme.lightMode.primary,
+      tool: tools.finish,
 		},
 	];
 
@@ -51,7 +64,7 @@ export default function ActionsLayer() {
 								className="absolute bottom-0 right-0"
 								border={action.border}
 								borderColor={action.borderColor}
-								// onClick={handleShowButtons}
+								onClick={() => handleClickAction(action.tool)}
 								key={index}
 							/>
 						))}
