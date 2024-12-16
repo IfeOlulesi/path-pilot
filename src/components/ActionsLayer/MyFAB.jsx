@@ -1,8 +1,19 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-export default function MyFAB({ icon, color, border = false, borderColor = "", onClick }) {
+export default function MyFAB({
+	icon,
+	bgColor,
+	border = false,
+	borderColor = "",
+	onClick,
+}) {
 	return (
-		<div className={`bg-[${color}] py-3.5 px-4 rounded-full inline-flex place-content-center shadow-md cursor-pointer ${border && `border-2 border-[${borderColor}]`}`} onClick={onClick}>
+		<div
+			className={`bg-[${bgColor}] py-3.5 px-4 rounded-full inline-flex place-content-center shadow-md cursor-pointer ${
+				border && `border-2 border-[${borderColor}]`
+			}`}
+			onClick={onClick}
+		>
 			{icon}
 		</div>
 	);
@@ -10,8 +21,8 @@ export default function MyFAB({ icon, color, border = false, borderColor = "", o
 
 MyFAB.propTypes = {
 	icon: PropTypes.element,
-	color: PropTypes.string,
+	bgColor: PropTypes.string,
 	border: PropTypes.bool,
 	borderColor: PropTypes.string,
-	onClick: PropTypes.func
+	onClick: PropTypes.func,
 };

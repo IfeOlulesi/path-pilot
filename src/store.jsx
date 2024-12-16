@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { tools } from "@/utils/constants";
+import { bfs } from "./utils/algos";
 
 export const useAppStore = create((set) => ({
 	// constants
@@ -36,13 +37,13 @@ export const useAppStore = create((set) => ({
 	updateCell: (row, col, updates) =>
 		set((state) => {
 			const newMazeData = [...state.mazeData];
-			const oldCurrentCell = state.mazeData[row][col];
-      newMazeData[row][col] = { ...newMazeData[row][col], ...updates };
-      
-			console.log("oldCurrentCell: ", oldCurrentCell);
-			console.log("state.startPos: ", state.startPos);
-			console.log("updates: ", updates);
-      
+			// const oldCurrentCell = state.mazeData[row][col];
+			newMazeData[row][col] = { ...newMazeData[row][col], ...updates };
+
+			// console.log("oldCurrentCell: ", oldCurrentCell);
+			// console.log("state.startPos: ", state.startPos);
+			// console.log("updates: ", updates);
+
 			// if first time setting start pos, set startPos to current cell
 			if (updates.type === tools.begin && state.startPos === null) {
 				return { mazeData: newMazeData, startPos: { row, col } };
@@ -57,7 +58,7 @@ export const useAppStore = create((set) => ({
 				return { mazeData: newMazeData, startPos: { row, col } };
 			}
 
-      if (updates.type === tools.finish && state.endPos === null) {
+			if (updates.type === tools.finish && state.endPos === null) {
 				return { mazeData: newMazeData, endPos: { row, col } };
 
 				// if not, reset old end pos and set new end pos
@@ -70,15 +71,42 @@ export const useAppStore = create((set) => ({
 				return { mazeData: newMazeData, endPos: { row, col } };
 			}
 
-			// if (updates.type === tools.finish && state.endPos === null) {
-			//   newMazeData[row][col] = { ...newMazeData[row][col], ...updates };
-			//   return { mazeData: newMazeData, endPos: { row, col } };
-			// }
-			// console.log(row, col);
-			// console.log(updates);
 			newMazeData[row][col] = { ...newMazeData[row][col], ...updates };
 			return { mazeData: newMazeData };
 		}),
 
 	setCurrentTool: (tool) => set(() => ({ currentTool: tool })),
+
+	findShortestPath: () =>
+		set((state) => {
+			console.log("finding shortest path from store...");
+			// TODO: Add gaurd clause to check if start and end pos are valid
+      const graphDim = {
+        rows: state.mazeData.length,
+        cols: state.mazeData[0].length
+      }
+      const startPosArr = [state.startPos.row, state.startPos.col]
+      const endPosArr = [state.endPos.row, state.endPos.col]
+			const shortestPath = bfs(startPosArr, endPosArr, graphDim);
+			const newMazeData = [...state.mazeData];
+
+			console.log(shortestPath);
+
+			if (shortestPath) {
+				for (const node in shortestPath) {
+					const cords = shortestPath[node];
+					console.log("cords: ", cords)
+					newMazeData[cords[0]][cords[1]] = {
+						type: "path",
+						row: cords[0],
+						col: cords[1],
+					};
+				}
+				console.log("Updating shortest path in store...");
+				return { mazeData: newMazeData };
+			}
+
+			console.log("Path not found");
+			return { mazeData: newMazeData };
+		}),
 }));

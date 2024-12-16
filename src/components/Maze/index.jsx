@@ -29,7 +29,6 @@ export default function Maze() {
   
 	const handleCellClick = useCallback(
     (row, col) => {
-      console.log("Handling click of cell: ", `${row}, ${col}`); 
 			updateCell(row, col, { type: currentTool });
 		},
 		[updateCell, currentTool]
@@ -76,7 +75,7 @@ export default function Maze() {
 				width={MAZE_WIDTH}
 				height={MAZE_HEIGHT}
 			>
-				<Layer>{cells}</Layer>
+				<Layer on>{cells}</Layer>
 			</Stage>
 		</div>
 	);

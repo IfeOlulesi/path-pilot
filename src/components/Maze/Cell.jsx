@@ -1,9 +1,11 @@
 /* eslint-disable react/no-unknown-property */
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { Rect } from "react-konva";
 import PropTypes from "prop-types";
 
 export default function Cell({ xPos, yPos, type, onClick }) {
+const isMouseDown = useRef(false);
+
 	const color = useMemo(() => {
 		switch (type) {
 			case "wall":
@@ -21,6 +23,22 @@ export default function Cell({ xPos, yPos, type, onClick }) {
 		}
 	}, [type]);
 
+	const handleMouseDown = () => {
+    isMouseDown.current = true; 
+	};
+
+	const handleMouseUp = () => {
+    isMouseDown.current = false; 
+	};
+
+	const handleMouseEnter = (event) => {
+
+    if (event.evt.buttons === 1) { 
+      // 1 indicates the primary button (usually the left button) is pressed
+      onClick();
+    } 
+	};
+
 	return (
 		<Rect
 			x={xPos}
@@ -29,8 +47,11 @@ export default function Cell({ xPos, yPos, type, onClick }) {
 			height={20}
 			fill={color}
 			onClick={onClick}
-      stroke={'black'}
-      strokeWidth={0.2}
+			onMouseDown={handleMouseDown}
+			onMouseUp={handleMouseUp}
+			onMouseEnter={handleMouseEnter}
+			stroke={'black'}
+			strokeWidth={0.2}
 		/>
 	);
 }

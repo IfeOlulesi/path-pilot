@@ -60,7 +60,7 @@ export default function ActionsLayer() {
 						secActions.map((action, index) => (
 							<MyFAB
 								icon={action.icon}
-								color={action.color}
+								bgColor={action.color}
 								className="absolute bottom-0 right-0"
 								border={action.border}
 								borderColor={action.borderColor}
@@ -77,8 +77,9 @@ export default function ActionsLayer() {
 							<PathPilotLogoMini color={theme.lightMode.white} scale={0.8} />
 						)
 					}
-					color={theme.lightMode.primary}
+					bgColor={theme.lightMode.primary}
 					className="absolute bottom-0 right-0"
+					border={false}
 					onClick={handleShowButtons}
 				/>
 			</div>
