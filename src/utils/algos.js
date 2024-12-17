@@ -1,7 +1,5 @@
-function bfs(start, end, graphDim) {
-  console.log(graphDim)
-  const graph = createGraph(graphDim.rows, graphDim.cols)
-  console.log(graph)
+function bfs(start, end, maze) {
+  // const maze = createmaze(mazeDim.rows, mazeDim.cols)
 
   var queue = [start]
   var visitedCells = new Set()
@@ -17,7 +15,7 @@ function bfs(start, end, graphDim) {
     }
 
     visitedCells.add(JSON.stringify(current))
-    const neighboursArr = getNeighbours(current, graph)
+    const neighboursArr = getNeighbours(current, maze)
 
     // INFO: Explore the neighbors of current node
     for (let neighbour of neighboursArr) {
@@ -35,17 +33,18 @@ function bfs(start, end, graphDim) {
   return false;
 }
 
-function getNeighbours(cell, graph) {
+function getNeighbours(cell, maze) {
+  debugger;
   console.log(cell)
   // should return an iterable: array
   // max of 4 neighbours, min of 3
   const [row, col] = cell;
   const neighbours = []
 
-  // find dimension of graph - max x, max y
+  // find dimension of maze - max x, max y
   // assuming all rows are equal in dim
-  const rowMax = graph.length
-  const colMax = graph[0].length
+  const rowMax = maze.length
+  const colMax = maze[0].length
 
   // INFO: Initially considered adding diagonal nodes as valid neighbors,
   // INFO: Thought otherwise on second thought
@@ -71,7 +70,14 @@ function getNeighbours(cell, graph) {
 
       // INFO: Gaurd against out-of-range indexes i.e. index < elements in array
       if (targetNeighbour[0] < rowMax && targetNeighbour[1] < colMax) {
-        neighbours.push(targetNeighbour)
+        const targetRow = targetNeighbour[0]
+        const targetCol = targetNeighbour[1]
+
+        if (maze[targetRow][targetCol].type !== "wall") {
+          // INFO: Gaurd against wall cells
+          neighbours.push(targetNeighbour)
+        }
+        
       }
     }
   }
@@ -92,8 +98,8 @@ function reconstructPath(predecessors, start, end) {
   return path
 }
 
-function createGraph(rows, cols) {
-  return Array.from({ length: rows }, () => Array(cols).fill(0));
-}
+// function createmaze(rows, cols) {
+//   return Array.from({ length: rows }, () => Array(cols).fill(0));
+// }
 
 export { bfs };

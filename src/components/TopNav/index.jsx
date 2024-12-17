@@ -1,5 +1,6 @@
 import PathPilotLogo from "@/assets/PathPilotLogo";
 import { useAppStore } from "@/store";
+
 export default function TopNav() {
 	const { findShortestPath } = useAppStore();
 

@@ -81,13 +81,13 @@ export const useAppStore = create((set) => ({
 		set((state) => {
 			console.log("finding shortest path from store...");
 			// TODO: Add gaurd clause to check if start and end pos are valid
-      const graphDim = {
-        rows: state.mazeData.length,
-        cols: state.mazeData[0].length
-      }
+      // const graphDim = {
+      //   rows: state.mazeData.length,
+      //   cols: state.mazeData[0].length
+      // }
       const startPosArr = [state.startPos.row, state.startPos.col]
       const endPosArr = [state.endPos.row, state.endPos.col]
-			const shortestPath = bfs(startPosArr, endPosArr, graphDim);
+			const shortestPath = bfs(startPosArr, endPosArr, state.mazeData);
 			const newMazeData = [...state.mazeData];
 
 			console.log(shortestPath);
