@@ -10,8 +10,7 @@ export default function ActionsLayer() {
 	const [showButtons, setShowButtons] = useState(false);
   const { setCurrentTool } = useAppStore();
 
-	const handleShowButtons = () => {
-		console.log("showButtons: ", showButtons);
+	const handleShowButtons = () => { 
 		setShowButtons(!showButtons);
 	};
 
@@ -54,7 +53,7 @@ export default function ActionsLayer() {
 
 	return (
 		<div className="absolute bottom-0 right-0 bg-red-500/0">
-			<div className="absolute bottom-0 right-0 p-4">
+			<div className="absolute bottom-0 right-0 px-4 py-10">
 				<div className="flex flex-col gap-2 pb-4">
 					{showButtons &&
 						secActions.map((action, index) => (

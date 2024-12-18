@@ -13,19 +13,21 @@ export default function Maze() {
 		DRAWER_WIDTH,
 		NAVBAR_HEIGHT,
 		CELL_WIDTH,
+    STATUS_BAR_HEIGHT,
+    initializeMaze,
 	} = useAppStore();
 
-  const MAZE_WIDTH = window.innerWidth - DRAWER_WIDTH ;
-  const MAZE_HEIGHT = window.innerHeight - NAVBAR_HEIGHT;
+  const MAZE_WIDTH = window.innerWidth - DRAWER_WIDTH;
+  const MAZE_HEIGHT = window.innerHeight - NAVBAR_HEIGHT - STATUS_BAR_HEIGHT;
 
   const mazeRows = Math.floor(MAZE_HEIGHT / CELL_WIDTH);
   const mazeCols = Math.floor(MAZE_WIDTH / CELL_WIDTH) ;
   
 	useEffect(() => {
     if (mazeData.length === 0) {
-      useAppStore.getState().initializeMaze(mazeRows, mazeCols);
+      initializeMaze();
 		}
-	}, [mazeCols, mazeData.length, mazeRows]);
+	}, [mazeData.length, initializeMaze]);
   
 	const handleCellClick = useCallback(
     (row, col) => {
@@ -69,7 +71,7 @@ export default function Maze() {
 	return (
 		<div
 			id="canvas-container"
-			className="bg-[#F9FAFB] h-full w-full flex items-center justify-center"
+			className="bg-[#F9FAFB] w-full flex items-center justify-center"
 		>
 			<Stage
 				width={MAZE_WIDTH}

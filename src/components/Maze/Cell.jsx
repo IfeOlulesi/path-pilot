@@ -3,22 +3,23 @@ import { useMemo, useRef } from "react";
 import { Rect } from "react-konva";
 import PropTypes from "prop-types";
 import { useAppStore } from "@/store";
+import { tools } from "@/utils/constants";
 
 export default function Cell({ xPos, yPos, type, onClick }) {
-const isMouseDown = useRef(false);
-const { CELL_WIDTH } = useAppStore();
+	const isMouseDown = useRef(false);
+	const { CELL_WIDTH } = useAppStore();
 
 	const color = useMemo(() => {
 		switch (type) {
-			case "wall":
+			case tools.wall:
 				return "#1f2937";
-			case "begin":
+			case tools.begin:
 				return "#22c55e";
-			case "finish":
+			case tools.finish:
 				return "#ef4444";
-			case "path":
+			case tools.path:
 				return "#3b82f6";
-			case "visited":
+			case tools.visited:
 				return "#93c5fd";
 			default:
 				return "#ffffff";
@@ -26,19 +27,18 @@ const { CELL_WIDTH } = useAppStore();
 	}, [type]);
 
 	const handleMouseDown = () => {
-    isMouseDown.current = true; 
+		isMouseDown.current = true;
 	};
 
 	const handleMouseUp = () => {
-    isMouseDown.current = false; 
+		isMouseDown.current = false;
 	};
 
 	const handleMouseEnter = (event) => {
-
-    if (event.evt.buttons === 1) { 
-      // 1 indicates the primary button (usually the left button) is pressed
-      onClick();
-    } 
+		if (event.evt.buttons === 1) {
+			// 1 indicates the primary button (usually the left button) is pressed
+			onClick();
+		}
 	};
 
 	return (
@@ -52,7 +52,7 @@ const { CELL_WIDTH } = useAppStore();
 			onMouseDown={handleMouseDown}
 			onMouseUp={handleMouseUp}
 			onMouseEnter={handleMouseEnter}
-			stroke={'black'}
+			stroke={"black"}
 			strokeWidth={0.2}
 		/>
 	);

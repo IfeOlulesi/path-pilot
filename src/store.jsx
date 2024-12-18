@@ -1,25 +1,30 @@
 import { create } from "zustand";
-import { tools } from "@/utils/constants";
+import { tools, algorithms } from "@/utils/constants";
 import { bfs } from "./utils/algos";
 
 export const useAppStore = create((set) => ({
 	// constants
 	DRAWER_WIDTH: 200,
 	NAVBAR_HEIGHT: 65,
-	CELL_WIDTH: 20, // infer that each cell is a square
+  STATUS_BAR_HEIGHT: 65,
+	CELL_WIDTH: 30, // infer that each cell is a square
 
 	// variables
-	// mazeRows: 20,
-	// mazeCols: 30,
 	startPos: null,
 	endPos: null,
 	mazeData: [],
-	currentTool: tools.wall,
+	currentTool: tools.wall, // wall tool is the default tool
+  currentAlgo: algorithms.bfs, // bfs is the default (lol, only) algorithm
 
 	// actions
+	initializeMaze: () =>
+		set((state) => {
+      const MAZE_HEIGHT = window.innerHeight - state.NAVBAR_HEIGHT - state.STATUS_BAR_HEIGHT;
+      const MAZE_WIDTH = window.innerWidth - state.DRAWER_WIDTH;
+    
+      const mazeRows = Math.floor(MAZE_HEIGHT / state.CELL_WIDTH);
+      const mazeCols = Math.floor(MAZE_WIDTH / state.CELL_WIDTH) ;
 
-	initializeMaze: (mazeRows, mazeCols) =>
-		set(() => {
 			const newMazeData = Array(mazeRows)
 				.fill()
 				.map((_, row) =>
@@ -87,7 +92,7 @@ export const useAppStore = create((set) => ({
 				for (const node in pathWithoutStartEnd) {
 					const cords = pathWithoutStartEnd[node];
 					newMazeData[cords[0]][cords[1]] = {
-						type: "path",
+						type: tools.path,
 						row: cords[0],
 						col: cords[1],
 					};

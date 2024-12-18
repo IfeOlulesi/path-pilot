@@ -9,10 +9,14 @@ export default function MyFAB({
 }) {
 	return (
 		<div
-			className={`bg-[${bgColor}] py-3.5 px-4 rounded-full inline-flex place-content-center shadow-md cursor-pointer ${
+			className={`py-3.5 px-4 rounded-full inline-flex place-content-center shadow-md cursor-pointer ${
 				border && `border-2 border-[${borderColor}]`
 			}`}
 			onClick={onClick}
+      style={{
+        backgroundColor: bgColor,
+        borderWidth: '1.35px'
+      }}
 		>
 			{icon}
 		</div>

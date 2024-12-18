@@ -1,3 +1,5 @@
+import { tools } from "./constants"
+
 function bfs(start, end, maze) {
   // const maze = createmaze(mazeDim.rows, mazeDim.cols)
 
@@ -72,7 +74,7 @@ function getNeighbours(cell, maze) {
         const targetRow = targetNeighbour[0]
         const targetCol = targetNeighbour[1]
 
-        if (maze[targetRow][targetCol].type !== "wall") {
+        if (maze[targetRow][targetCol].type !== tools.wall) {
           // INFO: Gaurd against wall cells
           neighbours.push(targetNeighbour)
         }
@@ -97,8 +99,8 @@ function reconstructPath(predecessors, start, end) {
   return path
 }
 
-// function createmaze(rows, cols) {
-//   return Array.from({ length: rows }, () => Array(cols).fill(0));
-// }
+function dfs() { 
+  console.log("DFS coming soon....")
+}
 
-export { bfs };
+export { bfs, dfs };
