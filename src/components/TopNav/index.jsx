@@ -2,12 +2,21 @@ import PathPilotLogo from "@/assets/PathPilotLogo";
 import { useAppStore } from "@/store";
 
 export default function TopNav() {
-	const { findShortestPath } = useAppStore();
+	const { findShortestPath, startPos, endPos } = useAppStore();
 
 	function handleVisualize() {
-		// TODO: Add gaurd clause to check if start and end pos are valid
-    console.log("Visualizing...");
-		findShortestPath();
+		// INFO: Gaurd clause to check if start and end pos are valid
+
+		if (startPos === null && endPos === null) {
+			alert("Choose starting and ending point");
+		} else if (startPos === null) {
+			alert("Choose starting point");
+		} else if (endPos === null) {
+			alert("Choose ending point");
+		} else {
+			console.log("Visualizing...");
+			findShortestPath();
+		}
 	}
 
 	return (

@@ -2,9 +2,11 @@
 import { useMemo, useRef } from "react";
 import { Rect } from "react-konva";
 import PropTypes from "prop-types";
+import { useAppStore } from "@/store";
 
 export default function Cell({ xPos, yPos, type, onClick }) {
 const isMouseDown = useRef(false);
+const { CELL_WIDTH } = useAppStore();
 
 	const color = useMemo(() => {
 		switch (type) {
@@ -43,8 +45,8 @@ const isMouseDown = useRef(false);
 		<Rect
 			x={xPos}
 			y={yPos}
-			width={20}
-			height={20}
+			width={CELL_WIDTH}
+			height={CELL_WIDTH}
 			fill={color}
 			onClick={onClick}
 			onMouseDown={handleMouseDown}

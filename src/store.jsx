@@ -37,20 +37,15 @@ export const useAppStore = create((set) => ({
 	updateCell: (row, col, updates) =>
 		set((state) => {
 			const newMazeData = [...state.mazeData];
-			// const oldCurrentCell = state.mazeData[row][col];
 			newMazeData[row][col] = { ...newMazeData[row][col], ...updates };
 
-			// console.log("oldCurrentCell: ", oldCurrentCell);
-			// console.log("state.startPos: ", state.startPos);
-			// console.log("updates: ", updates);
-
-			// if first time setting start pos, set startPos to current cell
+			// INFO: If first time setting start pos, set startPos to current cell
 			if (updates.type === tools.begin && state.startPos === null) {
 				return { mazeData: newMazeData, startPos: { row, col } };
 
-				// if not, reset old start pos and set new start pos
+				// INFO: Else, reset old start pos and set new start pos
 			} else if (updates.type === tools.begin && state.startPos !== null) {
-				// reset former start cell
+				// INFO: reset former start cell
 				newMazeData[state.startPos.row][state.startPos.col] = {
 					...state.startPos,
 					type: "none",
@@ -61,9 +56,9 @@ export const useAppStore = create((set) => ({
 			if (updates.type === tools.finish && state.endPos === null) {
 				return { mazeData: newMazeData, endPos: { row, col } };
 
-				// if not, reset old end pos and set new end pos
+				// INFO: if not, reset old end pos and set new end pos
 			} else if (updates.type === tools.finish && state.endPos !== null) {
-				// reset former end cell
+				// INFO: reset former end cell
 				newMazeData[state.endPos.row][state.endPos.col] = {
 					...state.endPos,
 					type: "none",
@@ -79,34 +74,29 @@ export const useAppStore = create((set) => ({
 
 	findShortestPath: () =>
 		set((state) => {
-			console.log("finding shortest path from store...");
-			// TODO: Add gaurd clause to check if start and end pos are valid
-      // const graphDim = {
-      //   rows: state.mazeData.length,
-      //   cols: state.mazeData[0].length
-      // }
-      const startPosArr = [state.startPos.row, state.startPos.col]
-      const endPosArr = [state.endPos.row, state.endPos.col]
+			const startPosArr = [state.startPos.row, state.startPos.col];
+			const endPosArr = [state.endPos.row, state.endPos.col];
 			const shortestPath = bfs(startPosArr, endPosArr, state.mazeData);
 			const newMazeData = [...state.mazeData];
 
-			console.log(shortestPath);
-
 			if (shortestPath) {
-				for (const node in shortestPath) {
-					const cords = shortestPath[node];
-					console.log("cords: ", cords)
+        // INFO: Remove first and last elements
+				const pathWithoutStartEnd = shortestPath.slice(1, -1);
+
+        // INFO: Only color the intermediate path cells
+				for (const node in pathWithoutStartEnd) {
+					const cords = pathWithoutStartEnd[node];
 					newMazeData[cords[0]][cords[1]] = {
 						type: "path",
 						row: cords[0],
 						col: cords[1],
 					};
 				}
-				console.log("Updating shortest path in store...");
+
 				return { mazeData: newMazeData };
 			}
 
-			console.log("Path not found");
+			alert("Path not found");
 			return { mazeData: newMazeData };
 		}),
 }));

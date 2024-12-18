@@ -34,7 +34,6 @@ function bfs(start, end, maze) {
 }
 
 function getNeighbours(cell, maze) {
-  debugger;
   console.log(cell)
   // should return an iterable: array
   // max of 4 neighbours, min of 3
