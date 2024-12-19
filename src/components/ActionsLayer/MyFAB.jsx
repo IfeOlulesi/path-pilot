@@ -6,11 +6,16 @@ export default function MyFAB({
 	border = false,
 	borderColor = "",
 	onClick,
+  size = "sm",
 }) {
+  const sizes = {
+    sm: "p-3",
+    md: "p-4",
+  }
 	return (
 		<div
-			className={`py-3.5 px-4 rounded-full inline-flex place-content-center shadow-md cursor-pointer ${
-				border && `border-2 border-[${borderColor}]`
+			className={`${sizes[size]} rounded-full inline-flex w-fit place-content-center shadow-md cursor-pointer ${
+				border && `border-[${borderColor}]`
 			}`}
 			onClick={onClick}
       style={{
@@ -29,4 +34,5 @@ MyFAB.propTypes = {
 	border: PropTypes.bool,
 	borderColor: PropTypes.string,
 	onClick: PropTypes.func,
+  size: PropTypes.string,
 };

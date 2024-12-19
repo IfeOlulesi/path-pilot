@@ -11,21 +11,45 @@ export const tools = {
 
 export const algorithms = {
   bfs: {
+    key: "bfs",
     sName: "BFS",
-    lName: "Breadth First Search"
+    lName: "Breadth-first Search"
   },
   dfs: {
+    key: "dfs",
     sName: "DFS",
-    lName: "Depth First Search"
+    lName: "Depth-first Search"
   },
   aStar: {
+    key: "aStar",
     sName: "A*",
-    lName: "A*"
+    lName: "A* Search"
   },
   dij: {
+    key: "dij",
     sName: "Dijkstra",
     lName: "Dijkstra",
   },
+  gbfs: {
+    key: "gbfs",
+    sName: "Greedy BFS",
+    lName: "Greedy Best-first Search"
+  },
+  swarm: {
+    key: "swarm",
+    sName: 'Swarm',
+    lName: "Swarm"
+  },
+  cSwarm: {
+    key: "cSwarm",
+    sName: "Conv. Swarm",
+    lName: "Convergent Swarm"
+  },
+  bSwarm: {
+    key: "bSwarm",
+    sName: "Bi-dir. Swarm",
+    lName: "Bi-directional Swarm"
+  }
 }
 
 export const cells = {

@@ -6,24 +6,25 @@ export const useAppStore = create((set) => ({
 	// constants
 	DRAWER_WIDTH: 200,
 	NAVBAR_HEIGHT: 65,
-  STATUS_BAR_HEIGHT: 65,
-	CELL_WIDTH: 30, // infer that each cell is a square
+	STATUS_BAR_HEIGHT: 65,
+	CELL_WIDTH: 40, // infer that each cell is a square
 
 	// variables
 	startPos: null,
 	endPos: null,
 	mazeData: [],
 	currentTool: tools.wall, // wall tool is the default tool
-  currentAlgo: algorithms.bfs, // bfs is the default (lol, only) algorithm
+	currentAlgo: algorithms.bfs, // bfs is the default (lol, only) algorithm
 
 	// actions
 	initializeMaze: () =>
 		set((state) => {
-      const MAZE_HEIGHT = window.innerHeight - state.NAVBAR_HEIGHT - state.STATUS_BAR_HEIGHT;
-      const MAZE_WIDTH = window.innerWidth - state.DRAWER_WIDTH;
-    
-      const mazeRows = Math.floor(MAZE_HEIGHT / state.CELL_WIDTH);
-      const mazeCols = Math.floor(MAZE_WIDTH / state.CELL_WIDTH) ;
+			const MAZE_HEIGHT =
+				window.innerHeight - state.NAVBAR_HEIGHT - state.STATUS_BAR_HEIGHT;
+			const MAZE_WIDTH = window.innerWidth - state.DRAWER_WIDTH;
+
+			const mazeRows = Math.floor(MAZE_HEIGHT / state.CELL_WIDTH);
+			const mazeCols = Math.floor(MAZE_WIDTH / state.CELL_WIDTH);
 
 			const newMazeData = Array(mazeRows)
 				.fill()
@@ -77,6 +78,8 @@ export const useAppStore = create((set) => ({
 
 	setCurrentTool: (tool) => set(() => ({ currentTool: tool })),
 
+	setCurrentAlgo: (algo) => set(() => ({ currentAlgo: algo })),
+
 	findShortestPath: () =>
 		set((state) => {
 			const startPosArr = [state.startPos.row, state.startPos.col];
@@ -85,10 +88,10 @@ export const useAppStore = create((set) => ({
 			const newMazeData = [...state.mazeData];
 
 			if (shortestPath) {
-        // INFO: Remove first and last elements
+				// INFO: Remove first and last elements
 				const pathWithoutStartEnd = shortestPath.slice(1, -1);
 
-        // INFO: Only color the intermediate path cells
+				// INFO: Only color the intermediate path cells
 				for (const node in pathWithoutStartEnd) {
 					const cords = pathWithoutStartEnd[node];
 					newMazeData[cords[0]][cords[1]] = {
