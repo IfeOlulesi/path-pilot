@@ -1,30 +1,30 @@
 /* eslint-disable react/no-unknown-property */
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 import { Rect } from "react-konva";
 import PropTypes from "prop-types";
 import { useAppStore } from "@/store";
-import { tools } from "@/utils/constants";
+import { cells } from "@/utils/constants";
 
 export default function Cell({ xPos, yPos, type, onClick }) {
 	const isMouseDown = useRef(false);
 	const { CELL_WIDTH } = useAppStore();
 
-	const color = useMemo(() => {
-		switch (type) {
-			case tools.wall:
-				return "#1f2937";
-			case tools.begin:
-				return "#22c55e";
-			case tools.finish:
-				return "#ef4444";
-			case tools.path:
-				return "#3b82f6";
-			case tools.visited:
-				return "#93c5fd";
-			default:
-				return "#ffffff";
-		}
-	}, [type]);
+	// const color = useMemo(() => {
+	// 	switch (type) {
+	// 		case cells.wall.name:
+	// 			return cells.wall.color;
+	// 		case cells.begin.name:
+	// 			return cells.begin.color;
+	// 		case cells.finish.name:
+	// 			return cells.finish.color;
+	// 		case cells.path.name:
+	// 			return cells.path.color;
+	// 		case cells.visited.name:
+	// 			return cells.visited.color;
+	// 		default:
+	// 			return cells.default.color;
+	// 	}
+	// }, [type]);
 
 	const handleMouseDown = () => {
 		isMouseDown.current = true;
@@ -47,7 +47,7 @@ export default function Cell({ xPos, yPos, type, onClick }) {
 			y={yPos}
 			width={CELL_WIDTH}
 			height={CELL_WIDTH}
-			fill={color}
+			fill={cells[type].color}
 			onClick={onClick}
 			onMouseDown={handleMouseDown}
 			onMouseUp={handleMouseUp}

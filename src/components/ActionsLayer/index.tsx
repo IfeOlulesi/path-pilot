@@ -7,11 +7,11 @@ import { useAppStore } from "@/store";
 import MyFAB from "@/components/ActionsLayer/MyFAB";
 import { algorithms, tools } from "@/utils/constants";
 import PathPilotLogoMini from "@/assets/PathPilotLogoMini";
-import MyPopover from "./MyPopover";
+import MyPopover from "@/components/ActionsLayer/MyPopover";
 
 export default function ActionsLayer() {
 	const [showButtons, setShowButtons] = useState(false);
-	const [menuContent, setMenuContent] = useState(null);
+	const [menuContent, setMenuContent] = useState<string[] | null>(null);
 	const { setCurrentTool } = useAppStore();
 
 	const primFabIcon = showButtons ? (
@@ -24,7 +24,15 @@ export default function ActionsLayer() {
 		setShowButtons(!showButtons);
 	};
 
-	const handleClickAction = ({ tool, type, menu = [] }) => {
+	const handleClickAction = ({
+		tool,
+		type,
+		menu = [],
+	}: {
+		tool: string;
+		type: string;
+		menu: string[];
+	}) => {
 		if (type === "tool") {
 			setCurrentTool(tool);
 		} else if (type === "menu") {
@@ -60,7 +68,13 @@ export default function ActionsLayer() {
 	);
 }
 
-function ShowSecondaryFABs({ showButtons, handleClickAction }) {
+function ShowSecondaryFABs({
+	showButtons,
+	handleClickAction,
+}: {
+	showButtons: boolean;
+	handleClickAction: (action: any) => void;
+}) {
 	const { setCurrentAlgo } = useAppStore();
 
 	const modelSecToolFab = {
@@ -114,11 +128,11 @@ function ShowSecondaryFABs({ showButtons, handleClickAction }) {
 										className="absolute bottom-0 right-0"
 										border={action.border}
 										borderColor={action.borderColor}
-										onClick={(e) => handleClickAction(action, e)}
+										onClick={() => handleClickAction(action)}
 										key={index}
 									/>
 								}
-								menu={action.menu}
+								menu={"menu" in action ? action.menu : undefined}
 								handleMenuClick={setCurrentAlgo}
 								key={index}
 							/>

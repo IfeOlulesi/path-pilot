@@ -25,8 +25,3 @@ const PathPilotLogoMini = ({ color = "white", scale = 1 }) => {
 };
 
 export default PathPilotLogoMini;
-
-PathPilotLogoMini.propTypes = {
-	color: PropTypes.string,
-	scale: PropTypes.number
-};

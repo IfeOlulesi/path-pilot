@@ -53,10 +53,28 @@ export const algorithms = {
 }
 
 export const cells = {
-  wall: "#1f2937",
-  begin: "#22c55e",
-  finish: "#ef4444",
-  path: "#3b82f6",
-  visited: "#93c5fd",
-  default: "#ffffff"
+  wall: {
+    color: "#1f2937",
+    name: "wall"
+  },
+  begin: {
+    color: "#22c55e",
+    name: "begin"
+  },
+  finish: {
+    color: "#ef4444",
+    name: "finish"
+  },
+  path: {
+    color: "#3b82f6",
+    name: "path"
+  },
+  visited: {
+    color: "#93c5fd",
+    name: "visited"
+  },
+  default: {
+    color: "#ffffff",
+    name: "default"
+  }
 }

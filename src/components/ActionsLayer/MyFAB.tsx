@@ -7,7 +7,8 @@ export default function MyFAB({
 	borderColor = "",
 	onClick,
 	size = "sm",
-}) {
+}: MyFABProps) {
+
 	const sizes = {
 		sm: "p-3",
 		md: "p-4",
@@ -31,11 +32,12 @@ export default function MyFAB({
 	);
 }
 
-MyFAB.propTypes = {
-	icon: PropTypes.element,
-	bgColor: PropTypes.string,
-	border: PropTypes.bool,
-	borderColor: PropTypes.string,
-	onClick: PropTypes.func,
-	size: PropTypes.string,
-};
+interface MyFABProps {
+	icon: React.ReactNode;
+	bgColor: string;
+	border: boolean;
+	borderColor?: string;
+	onClick: (event: React.MouseEvent<HTMLDivElement>) => void;
+	size?: "sm" | "md";
+	className?: string;
+}

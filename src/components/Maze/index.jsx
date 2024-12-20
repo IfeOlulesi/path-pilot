@@ -16,6 +16,8 @@ export default function Maze() {
     initializeMaze,
 	} = useAppStore();
 
+  console.log(mazeData)
+
   const MAZE_WIDTH = window.innerWidth - DRAWER_WIDTH;
   const MAZE_HEIGHT = window.innerHeight - NAVBAR_HEIGHT - STATUS_BAR_HEIGHT;
 

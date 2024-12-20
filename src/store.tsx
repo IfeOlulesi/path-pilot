@@ -1,8 +1,9 @@
 import { create } from "zustand";
-import { tools, algorithms } from "@/utils/constants";
+import { tools, algorithms, cells } from "@/utils/constants";
 import { bfs } from "./utils/algos";
+import { CellCoordinatesArr, AppStoreProps, Updates, Algorithm } from "./utils/types";
 
-export const useAppStore = create((set) => ({
+export const useAppStore = create<AppStoreProps>((set) => ({
 	// constants
 	DRAWER_WIDTH: 200,
 	NAVBAR_HEIGHT: 65,
@@ -18,7 +19,7 @@ export const useAppStore = create((set) => ({
 
 	// actions
 	initializeMaze: () =>
-		set((state) => {
+		set((state: AppStoreProps) => {
 			const MAZE_HEIGHT =
 				window.innerHeight - state.NAVBAR_HEIGHT - state.STATUS_BAR_HEIGHT;
 			const MAZE_WIDTH = window.innerWidth - state.DRAWER_WIDTH;
@@ -27,12 +28,12 @@ export const useAppStore = create((set) => ({
 			const mazeCols = Math.floor(MAZE_WIDTH / state.CELL_WIDTH);
 
 			const newMazeData = Array(mazeRows)
-				.fill()
+				.fill(null)
 				.map((_, row) =>
 					Array(mazeCols)
-						.fill()
+						.fill(null)
 						.map((_, col) => ({
-							type: "none",
+							type: cells.default.name,
 							row,
 							col,
 						}))
@@ -40,8 +41,8 @@ export const useAppStore = create((set) => ({
 			return { mazeData: newMazeData };
 		}),
 
-	updateCell: (row, col, updates) =>
-		set((state) => {
+	updateCell: (row: number, col: number, updates: Updates) =>
+		set((state: AppStoreProps) => {
 			const newMazeData = [...state.mazeData];
 			newMazeData[row][col] = { ...newMazeData[row][col], ...updates };
 
@@ -54,7 +55,7 @@ export const useAppStore = create((set) => ({
 				// INFO: reset former start cell
 				newMazeData[state.startPos.row][state.startPos.col] = {
 					...state.startPos,
-					type: "none",
+					type: cells.default.name,
 				};
 				return { mazeData: newMazeData, startPos: { row, col } };
 			}
@@ -67,7 +68,7 @@ export const useAppStore = create((set) => ({
 				// INFO: reset former end cell
 				newMazeData[state.endPos.row][state.endPos.col] = {
 					...state.endPos,
-					type: "none",
+					type: cells.default.name,
 				};
 				return { mazeData: newMazeData, endPos: { row, col } };
 			}
@@ -76,14 +77,24 @@ export const useAppStore = create((set) => ({
 			return { mazeData: newMazeData };
 		}),
 
-	setCurrentTool: (tool) => set(() => ({ currentTool: tool })),
+	setCurrentTool: (tool: string) => set(() => ({ currentTool: tool })),
 
-	setCurrentAlgo: (algo) => set(() => ({ currentAlgo: algo })),
+	setCurrentAlgo: (algo: Algorithm) => set(() => ({ currentAlgo: algo })),
 
 	findShortestPath: () =>
-		set((state) => {
-			const startPosArr = [state.startPos.row, state.startPos.col];
-			const endPosArr = [state.endPos.row, state.endPos.col];
+		set((state: AppStoreProps) => {
+			if (state.startPos === null || state.endPos === null) {
+				alert("Choose starting and ending point");
+				return { mazeData: state.mazeData };
+			}
+			const startPosArr: CellCoordinatesArr = [
+				state.startPos.row,
+				state.startPos.col,
+			];
+			const endPosArr: CellCoordinatesArr = [
+				state.endPos.row,
+				state.endPos.col,
+			];
 			const shortestPath = bfs(startPosArr, endPosArr, state.mazeData);
 			const newMazeData = [...state.mazeData];
 
@@ -95,7 +106,7 @@ export const useAppStore = create((set) => ({
 				for (const node in pathWithoutStartEnd) {
 					const cords = pathWithoutStartEnd[node];
 					newMazeData[cords[0]][cords[1]] = {
-						type: tools.path,
+						type: cells.path.name,
 						row: cords[0],
 						col: cords[1],
 					};

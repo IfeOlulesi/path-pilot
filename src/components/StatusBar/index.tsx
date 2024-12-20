@@ -19,14 +19,14 @@ function StatusBar() {
 export default StatusBar;
 
 function LeftContent() {
-	const cellsArr = Object.keys(cells);
+	const cellsArr = Object.keys(cells) as Array<keyof typeof cells>;
 	return (
 		<div className="flex flex-row gap-4">
-			{cellsArr.map((cell, index) => (
+			{cellsArr.map((cell: keyof typeof cells, index) => (
 				<div key={index} className="flex items-center gap-2">
 					<div
 						className={`w-3.5 h-3.5`}
-						style={{ backgroundColor: cells[cell] }}
+						style={{ backgroundColor: cells[cell].color }}
 					></div>
 					<div>{cell} </div>
 				</div>
