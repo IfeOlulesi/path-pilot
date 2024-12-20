@@ -1,7 +1,12 @@
 import { create } from "zustand";
 import { tools, algorithms, cells } from "@/utils/constants";
 import { bfs } from "./utils/algos";
-import { CellCoordinatesArr, AppStoreProps, Updates, Algorithm } from "./utils/types";
+import {
+	CellCoordinatesArr,
+	AppStoreProps,
+	Updates,
+	Algorithm,
+} from "./utils/types";
 
 export const useAppStore = create<AppStoreProps>((set) => ({
 	// constants
@@ -44,35 +49,42 @@ export const useAppStore = create<AppStoreProps>((set) => ({
 	updateCell: (row: number, col: number, updates: Updates) =>
 		set((state: AppStoreProps) => {
 			const newMazeData = [...state.mazeData];
-			newMazeData[row][col] = { ...newMazeData[row][col], ...updates };
 
 			// INFO: If first time setting start pos, set startPos to current cell
-			if (updates.type === tools.begin && state.startPos === null) {
+			if (updates.type === cells.begin.name && state.startPos === null) {
+				newMazeData[row][col] = { ...newMazeData[row][col], ...updates };
 				return { mazeData: newMazeData, startPos: { row, col } };
 
 				// INFO: Else, reset old start pos and set new start pos
-			} else if (updates.type === tools.begin && state.startPos !== null) {
+			} else if (updates.type === cells.begin.name && state.startPos !== null) {
 				// INFO: reset former start cell
 				newMazeData[state.startPos.row][state.startPos.col] = {
 					...state.startPos,
 					type: cells.default.name,
 				};
+
+				// INFO: set new start cell
+				newMazeData[row][col] = { ...newMazeData[row][col], ...updates };
 				return { mazeData: newMazeData, startPos: { row, col } };
 			}
 
-			if (updates.type === tools.finish && state.endPos === null) {
+			if (updates.type === cells.finish.name && state.endPos === null) {
+				newMazeData[row][col] = { ...newMazeData[row][col], ...updates };
 				return { mazeData: newMazeData, endPos: { row, col } };
 
 				// INFO: if not, reset old end pos and set new end pos
-			} else if (updates.type === tools.finish && state.endPos !== null) {
+			} else if (updates.type === cells.finish.name && state.endPos !== null) {
 				// INFO: reset former end cell
 				newMazeData[state.endPos.row][state.endPos.col] = {
 					...state.endPos,
 					type: cells.default.name,
 				};
+
+				newMazeData[row][col] = { ...newMazeData[row][col], ...updates };
 				return { mazeData: newMazeData, endPos: { row, col } };
 			}
 
+      // INFO: if not start or end, update cell
 			newMazeData[row][col] = { ...newMazeData[row][col], ...updates };
 			return { mazeData: newMazeData };
 		}),
