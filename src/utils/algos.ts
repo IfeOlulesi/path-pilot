@@ -1,14 +1,16 @@
-import { tools } from "./constants";
+import { cells, tools } from "./constants";
 import {
 	CellCoordinatesArr,
 	CellCoordinatesObj,
 	ReconstructPathParams,
 } from "./types";
 
-function bfs(
+async function bfs(
 	start: CellCoordinatesArr,
 	end: CellCoordinatesArr,
-	maze: CellCoordinatesObj[][]
+	maze: CellCoordinatesObj[][],
+	onVisit: (cell: CellCoordinatesArr) => Promise<void>,
+	onPathFound: (path: CellCoordinatesArr[]) => Promise<void>
 ) {
 	var queue = [start];
 	var visitedCells = new Set<string>();
@@ -22,20 +24,25 @@ function bfs(
 
 		// INFO: Destination node found
 		if (JSON.stringify(current) === JSON.stringify(end)) {
-			return reconstructPath({ predecessors, start, end });
+			const path = reconstructPath({ predecessors, start, end });
+			await onPathFound(path);
+			return true;
 		}
 
-		visitedCells.add(JSON.stringify(current));
+		const currentStr = JSON.stringify(current);
+		if (!visitedCells.has(currentStr)) {
+			visitedCells.add(currentStr);
+			await onVisit(current);
+		}
+
 		const neighboursArr = getNeighbours(current, maze);
 
 		// INFO: Explore the neighbors of current node
 		for (let neighbour of neighboursArr) {
-			const hasCellBeenVisited = visitedCells.has(JSON.stringify(neighbour));
-
-			if (!hasCellBeenVisited) {
+			const neighbourStr = JSON.stringify(neighbour);
+			if (!visitedCells.has(neighbourStr)) {
 				queue.push(neighbour);
-				visitedCells.add(JSON.stringify(neighbour)); // wondering why this line tho
-				predecessors.set(JSON.stringify(neighbour), JSON.stringify(current)); // document the route to this node/cell
+				predecessors.set(neighbourStr, currentStr);
 			}
 		}
 	}
@@ -80,7 +87,7 @@ function getNeighbours(cell: [number, number], maze: CellCoordinatesObj[][]) {
 				const targetRow = targetNeighbour[0];
 				const targetCol = targetNeighbour[1];
 
-				if (maze[targetRow][targetCol].type !== tools.wall) {
+				if (maze[targetRow][targetCol].type !== cells.wall.name) {
 					// INFO: Gaurd against wall cells
 					neighbours.push(targetNeighbour);
 				}

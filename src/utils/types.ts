@@ -30,6 +30,8 @@ export interface AppStoreProps {
 	NAVBAR_HEIGHT: number;
 	STATUS_BAR_HEIGHT: number;
 	CELL_WIDTH: number;
+	VISITED_CELL_DELAY: number;
+	PATH_CELL_DELAY: number;
 
 	// variables
 	startPos: { row: number; col: number } | null;
@@ -50,5 +52,6 @@ export interface AppStoreProps {
 	setCurrentTool: (tool: string) => void;
 	setCurrentAlgo: (algo: Algorithm) => void;
 	findShortestPath: () => void;
+	updateVisitedCells: (visitedCells: CellCoordinatesArr[]) => void;
 }
 

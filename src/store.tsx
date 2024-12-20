@@ -8,12 +8,14 @@ import {
 	Algorithm,
 } from "./utils/types";
 
-export const useAppStore = create<AppStoreProps>((set) => ({
+export const useAppStore = create<AppStoreProps>()((set) => ({
 	// constants
 	DRAWER_WIDTH: 200,
 	NAVBAR_HEIGHT: 65,
 	STATUS_BAR_HEIGHT: 65,
 	CELL_WIDTH: 40, // infer that each cell is a square
+	VISITED_CELL_DELAY: 1,
+	PATH_CELL_DELAY: 0.1,
 
 	// variables
 	startPos: null,
@@ -84,7 +86,7 @@ export const useAppStore = create<AppStoreProps>((set) => ({
 				return { mazeData: newMazeData, endPos: { row, col } };
 			}
 
-      // INFO: if not start or end, update cell
+			// INFO: if not start or end, update cell
 			newMazeData[row][col] = { ...newMazeData[row][col], ...updates };
 			return { mazeData: newMazeData };
 		}),
@@ -93,12 +95,25 @@ export const useAppStore = create<AppStoreProps>((set) => ({
 
 	setCurrentAlgo: (algo: Algorithm) => set(() => ({ currentAlgo: algo })),
 
+	updateVisitedCells: (visitedCells: CellCoordinatesArr[]) =>
+		set((state: AppStoreProps) => {
+			visitedCells.forEach((cell) => {
+				state.mazeData[cell[0]][cell[1]] = {
+					type: cells.visited.name,
+					row: cell[0],
+					col: cell[1],
+				};
+			});
+			return { mazeData: state.mazeData };
+		}),
+
 	findShortestPath: () =>
 		set((state: AppStoreProps) => {
 			if (state.startPos === null || state.endPos === null) {
 				alert("Choose starting and ending point");
 				return { mazeData: state.mazeData };
 			}
+
 			const startPosArr: CellCoordinatesArr = [
 				state.startPos.row,
 				state.startPos.col,
@@ -107,27 +122,57 @@ export const useAppStore = create<AppStoreProps>((set) => ({
 				state.endPos.row,
 				state.endPos.col,
 			];
-			const shortestPath = bfs(startPosArr, endPosArr, state.mazeData);
-			const newMazeData = [...state.mazeData];
 
-			if (shortestPath) {
-				// INFO: Remove first and last elements
-				const pathWithoutStartEnd = shortestPath.slice(1, -1);
+			const onVisitHandler = async (cell: CellCoordinatesArr) => {
+				await new Promise((resolve) =>
+					setTimeout(resolve, state.VISITED_CELL_DELAY)
+				);
+				set((state) => {
+					const newMazeData = [...state.mazeData];
+					// INFO: Null checks + startPos check
+					if (
+						cell !== null &&
+						state.startPos !== null &&
+						(cell[0] !== state.startPos.row ||
+							cell[1] !== state.startPos.col)
+					) {
+						newMazeData[cell[0]][cell[1]] = {
+							type: cells.visited.name,
+							row: cell[0],
+							col: cell[1],
+						};
+					}
+					return { mazeData: newMazeData };
+				});
+			};
 
-				// INFO: Only color the intermediate path cells
-				for (const node in pathWithoutStartEnd) {
-					const cords = pathWithoutStartEnd[node];
-					newMazeData[cords[0]][cords[1]] = {
-						type: cells.path.name,
-						row: cords[0],
-						col: cords[1],
-					};
+			const onPathFoundHandler = async (path: CellCoordinatesArr[]) => {
+				const pathWithoutStartEnd = path.slice(1, -1);
+				for (const cell of pathWithoutStartEnd) {
+					await new Promise((resolve) =>
+						setTimeout(resolve, state.PATH_CELL_DELAY)
+					);
+					set((state) => {
+						const newMazeData = [...state.mazeData];
+						newMazeData[cell[0]][cell[1]] = {
+							type: cells.path.name,
+							row: cell[0],
+							col: cell[1],
+						};
+						return { mazeData: newMazeData };
+					});
 				}
+			};
 
-				return { mazeData: newMazeData };
-			}
+			// Start the async BFS process
+			bfs(
+				startPosArr,
+				endPosArr,
+				state.mazeData,
+				onVisitHandler,
+				onPathFoundHandler
+			);
 
-			alert("Path not found");
-			return { mazeData: newMazeData };
+			return { mazeData: state.mazeData };
 		}),
 }));
