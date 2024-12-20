@@ -1,3 +1,5 @@
+// INFO: Deprecated
+
 import { Canvas } from "@react-three/fiber";
 import Cell from "./Cell";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
