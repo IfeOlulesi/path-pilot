@@ -6,22 +6,25 @@ export default function MyFAB({
 	border = false,
 	borderColor = "",
 	onClick,
-  size = "sm",
+	size = "sm",
 }) {
-  const sizes = {
-    sm: "p-3",
-    md: "p-4",
-  }
+	const sizes = {
+		sm: "p-3",
+		md: "p-4",
+	};
 	return (
 		<div
-			className={`${sizes[size]} rounded-full inline-flex w-fit place-content-center shadow-md cursor-pointer ${
+			className={`${
+				sizes[size]
+			} rounded-full inline-flex w-fit place-content-center shadow-md cursor-pointer ${
 				border && `border-[${borderColor}]`
 			}`}
 			onClick={onClick}
-      style={{
-        backgroundColor: bgColor,
-        borderWidth: '1.35px'
-      }}
+			style={{
+				backgroundColor: bgColor,
+				borderWidth: "1.35px",
+				border: border ? borderColor : "",
+			}}
 		>
 			{icon}
 		</div>
@@ -34,5 +37,5 @@ MyFAB.propTypes = {
 	border: PropTypes.bool,
 	borderColor: PropTypes.string,
 	onClick: PropTypes.func,
-  size: PropTypes.string,
+	size: PropTypes.string,
 };

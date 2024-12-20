@@ -1,5 +1,4 @@
 import Cell from './Cell'
-// import { useStore } from '@/store'
 import { useCallback, useEffect, useMemo } from "react";
 import { useAppStore } from "@/store";
 
