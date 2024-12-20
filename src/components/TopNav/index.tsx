@@ -6,29 +6,32 @@ export default function TopNav() {
 	const {
 		endPos,
 		startPos,
+		visualizationRunning,
 		initializeMaze,
 		findShortestPath,
 		prepMazeForNewVisualization,
 	} = useAppStore();
 
 	function handleVisualize() {
-		// TODO: Add check for if visualization is currently running
-		// INFO: Gaurd clause to check if start and end pos are valid
-		if (startPos === null && endPos === null) {
-			alert("Choose starting and ending point");
-		} else if (startPos === null) {
-			alert("Choose starting point");
-		} else if (endPos === null) {
-			alert("Choose ending point");
-		} else {
-			prepMazeForNewVisualization();
-			findShortestPath();
+		if (!visualizationRunning) {
+			// INFO: Gaurd clause to check if start and end pos are valid
+			if (startPos === null && endPos === null) {
+				alert("Choose starting and ending point");
+			} else if (startPos === null) {
+				alert("Choose starting point");
+			} else if (endPos === null) {
+				alert("Choose ending point");
+			} else {
+				prepMazeForNewVisualization();
+				findShortestPath();
+			}
 		}
 	}
 
 	function handleClear() {
-		// TODO: Add check for if visualization is currently running
-		initializeMaze();
+		if (!visualizationRunning) {
+			initializeMaze();
+		}
 	}
 
 	return (
@@ -40,23 +43,23 @@ export default function TopNav() {
 				Pick, select then visualize
 			</div>
 			<div className="flex flex-row gap-2">
-				<div
+				<button
 					onClick={handleClear}
-					className="content-center px-4 rounded-md text-sm cursor-pointer"
-					style={{
-						borderColor: theme.lightMode.primary,
-						color: theme.lightMode.primary,
-						borderWidth: "1px",
-					}}
+					className="btn btn-outline btn-secondary"
+					disabled={visualizationRunning}
 				>
 					Clear Maze
-				</div>
-				<div
+				</button>
+				<button
 					onClick={handleVisualize}
-					className="bg-[#1976D2] py-2 px-4 rounded-md text-white text-sm cursor-pointer flex place-content-center"
+					className="btn btn-primary"
+					disabled={visualizationRunning}
 				>
-					Visualize
-				</div>
+					{visualizationRunning && (
+						<span className="loading loading-md loading-spinner"></span>
+					)}
+					{visualizationRunning ? "Visualizing..." : "Visualize"}
+				</button>
 			</div>
 		</div>
 	);

@@ -9,13 +9,13 @@ import {
 } from "./utils/types";
 
 export const useAppStore = create<AppStoreProps>()((set) => ({
-	// constants
+	// constants - should probably move them to constants.ts
 	DRAWER_WIDTH: 200,
 	NAVBAR_HEIGHT: 65,
 	STATUS_BAR_HEIGHT: 65,
-	CELL_WIDTH: 40, // infer that each cell is a square
+	CELL_WIDTH: 60, // infer that each cell is a square
 	VISITED_CELL_DELAY: 1,
-	PATH_CELL_DELAY: 0.1,
+	PATH_CELL_DELAY: 1,
 
 	// variables
 	startPos: null,
@@ -24,9 +24,27 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 	currentTool: tools.wall, // wall tool is the default tool
 	currentAlgo: algorithms.bfs, // bfs is the default (lol, only) algorithm
 
+	visualizationRunning: false,
+	finishNodeSearchRunning: false,
+	pathConnectionRunning: false,
+	wasPathFound: null,
+
 	// actions
 	initializeMaze: () =>
 		set((state: AppStoreProps) => {
+			// INFO: Reset all variables
+			console.log("Resetting state when initializing maze");
+			set(() => ({
+				...state,
+				startPos: null,
+				endPos: null,
+				mazeData: [],
+				visualizationRunning: false,
+				finishNodeSearchRunning: false,
+				pathConnectionRunning: false,
+				wasPathFound: null,
+			}));
+
 			const MAZE_HEIGHT =
 				window.innerHeight - state.NAVBAR_HEIGHT - state.STATUS_BAR_HEIGHT;
 			const MAZE_WIDTH = window.innerWidth - state.DRAWER_WIDTH;
@@ -97,6 +115,16 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 
 	findShortestPath: () =>
 		set((state: AppStoreProps) => {
+			// INFO: Reset all variables
+			console.log("Resetting state when finding shortest path");
+			// set(() => ({
+			// 	...state,
+			// 	visualizationRunning: false,
+			// 	finishNodeSearchRunning: false,
+			// 	pathConnectionRunning: false,
+			// 	wasPathFound: null,
+			// }));
+
 			// INFO: Guard clause to check if start and end pos are valid
 			if (state.startPos === null || state.endPos === null) {
 				alert("Choose starting and ending point");
@@ -135,6 +163,11 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 			};
 
 			const onPathFoundHandler = async (path: CellCoordinatesArr[]) => {
+				set(() => ({
+					...state,
+					finishNodeSearchRunning: false,
+					pathConnectionRunning: true,
+				}));
 				const pathWithoutStartEnd = path.slice(1, -1);
 				for (const cell of pathWithoutStartEnd) {
 					await new Promise((resolve) =>
@@ -150,15 +183,36 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 						return { mazeData: newMazeData };
 					});
 				}
+				set(() => ({
+					...state,
+					pathConnectionRunning: false,
+					wasPathFound: true,
+				}));
 			};
 
+			const onPathNotFoundHandler = () => {
+				console.log("Path not found");
+				set(() => ({
+					...state,
+					visualizationRunning: false,
+					finishNodeSearchRunning: false,
+					wasPathFound: false,
+				}));
+			};
+
+			set(() => ({
+				...state,
+				visualizationRunning: true,
+				finishNodeSearchRunning: true,
+			}));
 			// Start the async BFS process
 			bfs(
 				startPosArr,
 				endPosArr,
 				state.mazeData,
 				onVisitHandler,
-				onPathFoundHandler
+				onPathFoundHandler,
+				onPathNotFoundHandler
 			);
 
 			return { mazeData: state.mazeData };

@@ -10,7 +10,8 @@ async function bfs(
 	end: CellCoordinatesArr,
 	maze: CellCoordinatesObj[][],
 	onVisit: (cell: CellCoordinatesArr) => Promise<void>,
-	onPathFound: (path: CellCoordinatesArr[]) => Promise<void>
+	onPathFound: (path: CellCoordinatesArr[]) => Promise<void>,
+	onPathNotFound: () => void
 ) {
 	var queue = [start];
 	var visitedCells = new Set<string>();
@@ -48,6 +49,7 @@ async function bfs(
 	}
 
 	// no path found
+	onPathNotFound();
 	return false;
 }
 

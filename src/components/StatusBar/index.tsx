@@ -1,6 +1,7 @@
 import { useAppStore } from "@/store";
 import { cells } from "@/utils/constants";
 import theme from "@/utils/theme";
+import { useEffect, useState } from "react";
 
 function StatusBar() {
 	return (
@@ -36,9 +37,49 @@ function LeftContent() {
 }
 
 function RightContent() {
-	const { currentTool, currentAlgo } = useAppStore();
+	const {
+		currentTool,
+		currentAlgo,
+		visualizationRunning,
+		finishNodeSearchRunning,
+		pathConnectionRunning,
+		wasPathFound,
+	} = useAppStore();
+
+	const [visualizationStatus, setVisualizationStatus] = useState("");
+
+	useEffect(() => {
+    debugger;
+		if (visualizationRunning) {
+			if (pathConnectionRunning) {
+				setVisualizationStatus("Routing");
+			} else if (finishNodeSearchRunning) {
+				setVisualizationStatus("Searching");
+			}
+		} else {
+			if (wasPathFound !== null) {
+				if (wasPathFound) {
+					setVisualizationStatus("Path found");
+				} else {
+					setVisualizationStatus("No path found");
+				}
+			}
+		}
+	}, [
+		visualizationRunning,
+		finishNodeSearchRunning,
+		pathConnectionRunning,
+		wasPathFound,
+	]);
+
 	return (
 		<div className="flex flex-row gap-6">
+			<div className="flex flex-row gap-1">
+				{visualizationRunning && (
+					<span className="loading loading-spinner loading-xs text-primary"></span>
+				)}
+				<span>{visualizationStatus}</span>
+			</div>
 			{currentTool && <div>{currentTool} Tool</div>}
 			<div>{currentAlgo.sName}</div>
 		</div>

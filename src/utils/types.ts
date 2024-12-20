@@ -45,6 +45,10 @@ export interface AppStoreProps {
 	>;
 	currentTool: string;
 	currentAlgo: Algorithm;
+	visualizationRunning: boolean;
+	finishNodeSearchRunning: boolean;
+	pathConnectionRunning: boolean;
+	wasPathFound: boolean | null;
 
 	// actions
 	initializeMaze: () => void;
