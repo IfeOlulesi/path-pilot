@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
 
 export default function MyFAB({
-	icon,
-	bgColor, 
+	activeIcon,
+	inactiveIcon,
+	isSelected, 
 	onClick,
 	size = "md",
 	tooltipText = null,
@@ -11,13 +12,13 @@ export default function MyFAB({
 	return (
     <div className={`${tooltipText ? "tooltip tooltip-left tooltip-secondary" : ""} `} data-tip={tooltipText}>
       <button
-        className={`btn btn-primary btn-circle btn-${size}`}
+        className={`btn btn-circle btn-${size} ${isSelected ? "btn-outline" : "btn-primary"}`}
         onClick={onClick}
         style={{
           borderWidth: "1.35px",
         }}
       >
-        {icon}
+        {isSelected ? activeIcon : inactiveIcon}
       </button>
 
     </div>
@@ -25,8 +26,9 @@ export default function MyFAB({
 }
 
 interface MyFABProps {
-	icon: React.ReactNode;
-	bgColor: string; 
+	activeIcon?: React.ReactNode;
+	inactiveIcon?: React.ReactNode;
+	isSelected?: boolean; 
 	onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 	size?: "sm" | "md" | "lg"; 
 	tooltipText?: string | null;

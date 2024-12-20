@@ -55,8 +55,7 @@ export default function ActionsLayer() {
 				</div>
 				<>
 					<MyFAB
-						icon={primFabIcon}
-						bgColor={theme.lightMode.white} 
+						inactiveIcon={primFabIcon}
 						onClick={handleShowButtons}
 						size="lg"
 					/>
@@ -73,7 +72,7 @@ function ShowSecondaryFABs({
 	showButtons: boolean;
 	handleClickAction: (action: any) => void;
 }) {
-	const { setCurrentAlgo } = useAppStore();
+	const { setCurrentAlgo, currentTool } = useAppStore();
 
 	const modelSecToolFab = {
 		color: theme.lightMode.white,
@@ -85,35 +84,45 @@ function ShowSecondaryFABs({
 	const secActions = [
 		{
 			...modelSecToolFab,
-			icon: <BrickWall color={theme.lightMode.white} size={20} />,
+			activeIcon: <BrickWall color={theme.lightMode.primary} size={20} />,
+			inactiveIcon: <BrickWall color={theme.lightMode.white} size={20} />,
 			tool: tools.wall,
 			tooltipText: "Wall tool",
+      isSelected: currentTool === tools.wall,
 		},
 		{
 			...modelSecToolFab,
-			icon: <Eraser color={theme.lightMode.white} size={20} />,
+			activeIcon: <Eraser color={theme.lightMode.primary} size={20} />,
+			inactiveIcon: <Eraser color={theme.lightMode.white} size={20} />,
 			tool: tools.eraser,
 			tooltipText: "Eraser tool",
+      isSelected: currentTool === tools.eraser,
 		},
 		{
 			...modelSecToolFab,
-			icon: <MapPin color={theme.lightMode.white} size={20} />,
+			activeIcon: <MapPin color={theme.lightMode.primary} size={20} />,
+			inactiveIcon: <MapPin color={theme.lightMode.white} size={20} />,
 			tool: tools.begin,
 			tooltipText: "Begin tool",
+      isSelected: currentTool === tools.begin,
 		},
 		{
 			...modelSecToolFab,
-			icon: <Flag color={theme.lightMode.white} size={20} />,
+			activeIcon: <Flag color={theme.lightMode.primary} size={20} />,
+			inactiveIcon: <Flag color={theme.lightMode.white} size={20} />,
 			tool: tools.finish,
 			tooltipText: "Finish tool",
+      isSelected: currentTool === tools.finish,
 		},
 		{
 			...modelSecToolFab,
-			icon: <Cpu color={theme.lightMode.white} size={20} />,
+			activeIcon: <Cpu color={theme.lightMode.primary} size={20} />,
+			inactiveIcon: <Cpu color={theme.lightMode.white} size={20} />,
 			type: "menu",
 			fn: "set-algo",
 			menu: Object.keys(algorithms),
 			tooltipText: "Select Algorithm",
+      isSelected: false
 		},
 	];
 
@@ -126,8 +135,9 @@ function ShowSecondaryFABs({
 							<MyPopover
 								triggerButton={
 									<MyFAB
-										icon={action.icon}
-										bgColor={action.color} 
+										activeIcon={action.activeIcon}
+										inactiveIcon={action.inactiveIcon}
+										isSelected={action.isSelected} 
 										onClick={() => handleClickAction(action)}
 										key={index}
 										tooltipText={action.tooltipText}
@@ -141,8 +151,9 @@ function ShowSecondaryFABs({
 					} else {
 						return (
 							<MyFAB
-								icon={action.icon}
-								bgColor={action.color} 
+								activeIcon={action.activeIcon}
+								inactiveIcon={action.inactiveIcon}
+								isSelected={action.isSelected} 
 								onClick={() => handleClickAction(action)}
 								key={index}
 								tooltipText={action.tooltipText}
