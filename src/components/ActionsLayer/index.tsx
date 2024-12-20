@@ -15,9 +15,9 @@ export default function ActionsLayer() {
 	const { setCurrentTool } = useAppStore();
 
 	const primFabIcon = showButtons ? (
-		<X color={theme.lightMode.white} size={20} />
+		<X color={theme.lightMode.white} size={30} />
 	) : (
-		<PathPilotLogoMini color={theme.lightMode.white} scale={0.8} />
+		<PathPilotLogoMini color={theme.lightMode.white} scale={1} />
 	);
 
 	const handleShowButtons = () => {
@@ -56,11 +56,9 @@ export default function ActionsLayer() {
 				<>
 					<MyFAB
 						icon={primFabIcon}
-						bgColor={theme.lightMode.primary}
-						className="absolute bottom-0 right-0"
-						border={false}
+						bgColor={theme.lightMode.white} 
 						onClick={handleShowButtons}
-						size="md"
+						size="lg"
 					/>
 				</>
 			</div>
@@ -80,37 +78,42 @@ function ShowSecondaryFABs({
 	const modelSecToolFab = {
 		color: theme.lightMode.white,
 		border: true,
-		borderColor: theme.lightMode.primary,
+		borderColor: theme.lightMode.white,
 		type: "tool",
 	};
 
 	const secActions = [
 		{
 			...modelSecToolFab,
-			icon: <BrickWall color={theme.lightMode.primary} size={20} />,
+			icon: <BrickWall color={theme.lightMode.white} size={20} />,
 			tool: tools.wall,
+			tooltipText: "Wall tool",
 		},
 		{
 			...modelSecToolFab,
-			icon: <Eraser color={theme.lightMode.primary} size={20} />,
+			icon: <Eraser color={theme.lightMode.white} size={20} />,
 			tool: tools.eraser,
+			tooltipText: "Eraser tool",
 		},
 		{
 			...modelSecToolFab,
-			icon: <MapPin color={theme.lightMode.primary} size={20} />,
+			icon: <MapPin color={theme.lightMode.white} size={20} />,
 			tool: tools.begin,
+			tooltipText: "Begin tool",
 		},
 		{
 			...modelSecToolFab,
-			icon: <Flag color={theme.lightMode.primary} size={20} />,
+			icon: <Flag color={theme.lightMode.white} size={20} />,
 			tool: tools.finish,
+			tooltipText: "Finish tool",
 		},
 		{
 			...modelSecToolFab,
-			icon: <Cpu color={theme.lightMode.primary} size={20} />,
+			icon: <Cpu color={theme.lightMode.white} size={20} />,
 			type: "menu",
 			fn: "set-algo",
 			menu: Object.keys(algorithms),
+			tooltipText: "Select Algorithm",
 		},
 	];
 
@@ -124,12 +127,10 @@ function ShowSecondaryFABs({
 								triggerButton={
 									<MyFAB
 										icon={action.icon}
-										bgColor={action.color}
-										className="absolute bottom-0 right-0"
-										border={action.border}
-										borderColor={action.borderColor}
+										bgColor={action.color} 
 										onClick={() => handleClickAction(action)}
 										key={index}
+										tooltipText={action.tooltipText}
 									/>
 								}
 								menu={"menu" in action ? action.menu : undefined}
@@ -141,12 +142,10 @@ function ShowSecondaryFABs({
 						return (
 							<MyFAB
 								icon={action.icon}
-								bgColor={action.color}
-								className="absolute bottom-0 right-0"
-								border={action.border}
-								borderColor={action.borderColor}
+								bgColor={action.color} 
 								onClick={() => handleClickAction(action)}
 								key={index}
+								tooltipText={action.tooltipText}
 							/>
 						);
 					}

@@ -2,42 +2,32 @@ import PropTypes from "prop-types";
 
 export default function MyFAB({
 	icon,
-	bgColor,
-	border = false,
-	borderColor = "",
+	bgColor, 
 	onClick,
-	size = "sm",
+	size = "md",
+	tooltipText = null,
 }: MyFABProps) {
 
-	const sizes = {
-		sm: "p-3",
-		md: "p-4",
-	};
 	return (
-		<div
-			className={`${
-				sizes[size]
-			} rounded-full inline-flex w-fit place-content-center shadow-md cursor-pointer ${
-				border && `border-[${borderColor}]`
-			}`}
-			onClick={onClick}
-			style={{
-				backgroundColor: bgColor,
-				borderWidth: "1.35px",
-				border: border ? borderColor : "",
-			}}
-		>
-			{icon}
-		</div>
+    <div className={`${tooltipText ? "tooltip tooltip-left tooltip-secondary" : ""} `} data-tip={tooltipText}>
+      <button
+        className={`btn btn-primary btn-circle btn-${size}`}
+        onClick={onClick}
+        style={{
+          borderWidth: "1.35px",
+        }}
+      >
+        {icon}
+      </button>
+
+    </div>
 	);
 }
 
 interface MyFABProps {
 	icon: React.ReactNode;
-	bgColor: string;
-	border: boolean;
-	borderColor?: string;
-	onClick: (event: React.MouseEvent<HTMLDivElement>) => void;
-	size?: "sm" | "md";
-	className?: string;
+	bgColor: string; 
+	onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+	size?: "sm" | "md" | "lg"; 
+	tooltipText?: string | null;
 }
