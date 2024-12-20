@@ -95,20 +95,9 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 
 	setCurrentAlgo: (algo: Algorithm) => set(() => ({ currentAlgo: algo })),
 
-	updateVisitedCells: (visitedCells: CellCoordinatesArr[]) =>
-		set((state: AppStoreProps) => {
-			visitedCells.forEach((cell) => {
-				state.mazeData[cell[0]][cell[1]] = {
-					type: cells.visited.name,
-					row: cell[0],
-					col: cell[1],
-				};
-			});
-			return { mazeData: state.mazeData };
-		}),
-
 	findShortestPath: () =>
 		set((state: AppStoreProps) => {
+			// INFO: Guard clause to check if start and end pos are valid
 			if (state.startPos === null || state.endPos === null) {
 				alert("Choose starting and ending point");
 				return { mazeData: state.mazeData };
@@ -133,8 +122,7 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 					if (
 						cell !== null &&
 						state.startPos !== null &&
-						(cell[0] !== state.startPos.row ||
-							cell[1] !== state.startPos.col)
+						(cell[0] !== state.startPos.row || cell[1] !== state.startPos.col)
 					) {
 						newMazeData[cell[0]][cell[1]] = {
 							type: cells.visited.name,
@@ -175,4 +163,29 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 
 			return { mazeData: state.mazeData };
 		}),
+
+	prepMazeForNewVisualization: () => {
+		set((state) => {
+			const newMazeData = [...state.mazeData];
+
+			// INFO: Reset all cells to default
+			for (let row = 0; row < newMazeData.length; row++) {
+				for (let col = 0; col < newMazeData[row].length; col++) {
+					if (
+						newMazeData[row][col].type !== cells.wall.name &&
+						newMazeData[row][col].type !== cells.begin.name &&
+						newMazeData[row][col].type !== cells.finish.name
+					) {
+						newMazeData[row][col] = {
+							type: cells.default.name,
+							row,
+							col,
+						};
+					}
+				}
+			}
+
+			return { mazeData: newMazeData };
+		});
+	},
 }));

@@ -3,7 +3,13 @@ import { useAppStore } from "@/store";
 import theme from "@/utils/theme";
 
 export default function TopNav() {
-	const { initializeMaze, findShortestPath, startPos, endPos } = useAppStore();
+	const {
+		endPos,
+		startPos,
+		initializeMaze,
+		findShortestPath,
+		prepMazeForNewVisualization,
+	} = useAppStore();
 
 	function handleVisualize() {
 		// TODO: Add check for if visualization is currently running
@@ -15,6 +21,7 @@ export default function TopNav() {
 		} else if (endPos === null) {
 			alert("Choose ending point");
 		} else {
+			prepMazeForNewVisualization();
 			findShortestPath();
 		}
 	}
@@ -36,11 +43,11 @@ export default function TopNav() {
 				<div
 					onClick={handleClear}
 					className="content-center px-4 rounded-md text-sm cursor-pointer"
-          style={{
-            borderColor: theme.lightMode.primary,
-            color: theme.lightMode.primary,
-            borderWidth: '1px'
-          }}
+					style={{
+						borderColor: theme.lightMode.primary,
+						color: theme.lightMode.primary,
+						borderWidth: "1px",
+					}}
 				>
 					Clear Maze
 				</div>

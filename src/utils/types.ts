@@ -52,6 +52,5 @@ export interface AppStoreProps {
 	setCurrentTool: (tool: string) => void;
 	setCurrentAlgo: (algo: Algorithm) => void;
 	findShortestPath: () => void;
-	updateVisitedCells: (visitedCells: CellCoordinatesArr[]) => void;
+	prepMazeForNewVisualization: () => void;
 }
-
