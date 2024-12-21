@@ -1,50 +1,52 @@
 import { useAppStore } from "@/store";
 import { algorithms } from "@/utils/constants";
 import theme from "@/utils/theme";
-import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
-import PropTypes from "prop-types";
 
-function MyPopover({ triggerButton, menu, handleMenuClick }) {
-	const primTheme = theme.lightMode.primary;
-	const hoverTheme = theme.lightMode.secondary;
+function MyPopover({ triggerButton, menu, handleMenuClick }: MyPopoverProps) {
 	const { currentAlgo } = useAppStore();
 	return (
-		<Popover>
-			<PopoverButton className="block text-sm/6 font-semibold text-white/50 focus:outline-none data-[active]:text-white data-[hover]:text-white data-[focus]:outline-1 data-[focus]:outline-black">
+		<div className="dropdown dropdown-left dropdown-end">
+			<div tabIndex={0} role="button">
 				{triggerButton}
-			</PopoverButton>
-			<PopoverPanel
-				transition
-				anchor="left end"
-				className={`divide-y divide-black/5 rounded-xl bg-[${primTheme}] text-sm transition duration-200 ease-in-out [--anchor-gap:8px] data-[closed]:-translate-y-1 data-[closed]:opacity-0`}
+			</div>
+
+			<ul
+				tabIndex={0}
+				className="dropdown-content menu bg-accent rounded-box z-[1] w-60 shadow mr-2"
 			>
-				<div className="p-3">
-					{menu.map((menuItem, index) => {
-						const menuBg =
-							currentAlgo.key === menuItem
-								? theme.lightMode.secondary
-								: theme.lightMode.primary;
-						return (
-							<a
-								className={`block bg-[${menuBg}] rounded-lg py-2 px-2 transition hover:bg-[${hoverTheme}] `}
-								href="#"
-								key={index}
-								onClick={() => handleMenuClick(algorithms[menuItem])}
-							>
-								<p className="text-white">{algorithms[menuItem].lName}</p>
-							</a>
-						);
-					})}
-				</div>
-			</PopoverPanel>
-		</Popover>
+				{menu.map((menuItem, index) => {
+					const menuBg =
+						currentAlgo.key === menuItem
+							? theme.lightMode.secondary
+							: theme.lightMode.primary;
+					return (
+						<li
+							className={`block rounded-lg p-1 transition text-white`}
+							style={{
+								backgroundColor: menuBg
+							}}
+							onMouseEnter={(e) => {
+								e.currentTarget.style.backgroundColor = theme.lightMode.lightPrimary;
+							}}
+							onMouseLeave={(e) => {
+								e.currentTarget.style.backgroundColor = menuBg;
+							}}
+							key={index}
+							onClick={() => handleMenuClick(algorithms[menuItem as keyof typeof algorithms])}
+						>
+							<a>{algorithms[menuItem as keyof typeof algorithms].lName}</a>
+						</li>
+					);
+				})}
+			</ul>
+		</div>
 	);
 }
 
 export default MyPopover;
 
-MyPopover.propTypes = {
-	triggerButton: PropTypes.element,
-	menu: PropTypes.array,
-	handleMenuClick: PropTypes.func,
-};
+interface MyPopoverProps {
+	triggerButton: React.ReactElement;
+	menu: string[];
+	handleMenuClick: (algo: any) => void;
+}
