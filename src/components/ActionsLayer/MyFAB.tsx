@@ -1,3 +1,4 @@
+import theme from "@/utils/theme";
 import PropTypes from "prop-types";
 
 export default function MyFAB({
@@ -16,6 +17,7 @@ export default function MyFAB({
         onClick={onClick}
         style={{
           borderWidth: "1.35px",
+          borderColor: theme.lightMode.primary,
         }}
       >
         {isSelected ? activeIcon : inactiveIcon}

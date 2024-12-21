@@ -36,7 +36,7 @@ export default function TopNav() {
 
 	return (
 		<div className="flex flex-row bg-white border-b-2 p-3 border-b-[#E4E7EC] justify-between">
-			<div className="flex place-content-center">
+			<div className="flex place-content-center items-center">
 				<PathPilotLogo color={theme.lightMode.primary} />
 			</div>
 			<div className="text-sm flex 	flex-wrap content-center">
