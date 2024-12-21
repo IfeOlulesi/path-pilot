@@ -72,13 +72,14 @@ function ShowSecondaryFABs({
 	showButtons: boolean;
 	handleClickAction: (action: any) => void;
 }) {
-	const { setCurrentAlgo, currentTool } = useAppStore();
+	const { setCurrentAlgo, currentTool, visualizationRunning } = useAppStore();
 
 	const modelSecToolFab = {
 		color: theme.lightMode.white,
 		border: true,
 		borderColor: theme.lightMode.white,
 		type: "tool",
+    isActive: !visualizationRunning,
 	};
 
 	const secActions = [
@@ -141,6 +142,7 @@ function ShowSecondaryFABs({
 										onClick={() => handleClickAction(action)}
 										key={index}
 										tooltipText={action.tooltipText}
+                    isActive={action.isActive}
 									/>
 								}
 								menu={"menu" in action ? action.menu : undefined}
@@ -157,6 +159,7 @@ function ShowSecondaryFABs({
 								onClick={() => handleClickAction(action)}
 								key={index}
 								tooltipText={action.tooltipText}
+                isActive={action.isActive}
 							/>
 						);
 					}

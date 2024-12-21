@@ -3,15 +3,17 @@ import { useRef } from "react";
 import { Rect } from "react-konva";
 import { useAppStore } from "@/store";
 import { cells } from "@/utils/constants";
-import { KonvaEventObject } from 'konva/lib/Node';
+import { KonvaEventObject } from "konva/lib/Node";
 
 export default function Cell({ xPos, yPos, type, onClick }: CellProps) {
 	const isMouseDown = useRef(false);
-	const { CELL_WIDTH } = useAppStore();
+	const { CELL_WIDTH, visualizationRunning } = useAppStore();
 
 	const handleMouseDown = () => {
-		isMouseDown.current = true;
-    onClick();
+		if (!visualizationRunning) {
+			isMouseDown.current = true;
+			onClick();
+		}
 	};
 
 	const handleMouseUp = (event: KonvaEventObject<MouseEvent>) => {
@@ -19,9 +21,11 @@ export default function Cell({ xPos, yPos, type, onClick }: CellProps) {
 	};
 
 	const handleMouseEnter = (event: KonvaEventObject<MouseEvent>) => {
-		if (event.evt.buttons === 1) {	
+		if (event.evt.buttons === 1 && !visualizationRunning) {
 			// 1 indicates the primary button (usually the left button) is pressed
-			onClick();
+			if (!visualizationRunning) {
+				onClick();
+			}
 		}
 	};
 
@@ -32,7 +36,6 @@ export default function Cell({ xPos, yPos, type, onClick }: CellProps) {
 			width={CELL_WIDTH}
 			height={CELL_WIDTH}
 			fill={cells[type.toLowerCase() as keyof typeof cells].color}
-			onClick={onClick}
 			onMouseDown={handleMouseDown}
 			onMouseUp={handleMouseUp}
 			onMouseEnter={handleMouseEnter}

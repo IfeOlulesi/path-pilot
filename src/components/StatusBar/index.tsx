@@ -49,7 +49,7 @@ function RightContent() {
 	const [visualizationStatus, setVisualizationStatus] = useState("");
 
 	useEffect(() => {
-    debugger;
+    // debugger;
 		if (visualizationRunning) {
 			if (pathConnectionRunning) {
 				setVisualizationStatus("Routing");

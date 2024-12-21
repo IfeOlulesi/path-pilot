@@ -8,6 +8,7 @@ export default function MyFAB({
 	onClick,
 	size = "md",
 	tooltipText = null,
+  isActive = true,
 }: MyFABProps) {
 
 	return (
@@ -34,4 +35,5 @@ interface MyFABProps {
 	onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 	size?: "sm" | "md" | "lg"; 
 	tooltipText?: string | null;
+  isActive?: boolean;
 }
