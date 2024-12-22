@@ -13,7 +13,7 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 	DRAWER_WIDTH: 200,
 	NAVBAR_HEIGHT: 65,
 	STATUS_BAR_HEIGHT: 65,
-	CELL_WIDTH: 60, // infer that each cell is a square
+	CELL_WIDTH: 20, // infer that each cell is a square
 	VISITED_CELL_DELAY: 1,
 	PATH_CELL_DELAY: 1,
 
@@ -30,10 +30,9 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 	wasPathFound: null,
 
 	// actions
-	initializeMaze: () =>
+	initializeMaze: () => 
 		set((state: AppStoreProps) => {
 			// INFO: Reset all variables
-			console.log("Resetting state when initializing maze");
 			set(() => ({
 				...state,
 				startPos: null,
@@ -116,14 +115,14 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 	findShortestPath: () =>
 		set((state: AppStoreProps) => {
 			// INFO: Reset all variables
-			console.log("Resetting state when finding shortest path");
-			// set(() => ({
-			// 	...state,
-			// 	visualizationRunning: false,
-			// 	finishNodeSearchRunning: false,
-			// 	pathConnectionRunning: false,
-			// 	wasPathFound: null,
-			// }));
+      console.log("Resetting variables")
+			set(() => ({
+				...state,
+				visualizationRunning: false,
+				finishNodeSearchRunning: false,
+				pathConnectionRunning: false,
+				wasPathFound: null,
+			}));
 
 			// INFO: Guard clause to check if start and end pos are valid
 			if (state.startPos === null || state.endPos === null) {
@@ -191,7 +190,6 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 			};
 
 			const onPathNotFoundHandler = () => {
-				console.log("Path not found");
 				set(() => ({
 					...state,
 					visualizationRunning: false,

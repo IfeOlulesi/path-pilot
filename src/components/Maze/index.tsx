@@ -31,10 +31,10 @@ export default function Maze() {
 
 	const handleCellClick = useCallback(
 		(row: number, col: number) => {
-      if (currentTool === "Eraser") {
-        updateCell(row, col, { type: cellTypes.default.name });
-        return;
-      }
+			if (currentTool === "Eraser") {
+				updateCell(row, col, { type: cellTypes.default.name });
+				return;
+			}
 			updateCell(row, col, { type: currentTool.toLowerCase() });
 		},
 		[updateCell, currentTool]
@@ -44,33 +44,25 @@ export default function Maze() {
 		const cellsArray = [];
 
 		for (let row = 0; row < mazeRows; row++) {
-			const adjustedRowValue = row * CELL_WIDTH;
 			const rowArr = [];
+			const adjustedRowValue = row * CELL_WIDTH;
 
 			for (let col = 0; col < mazeCols; col++) {
-				const adjustedColValue = col * CELL_WIDTH;
-				const xPos = adjustedColValue;
-				const yPos = adjustedRowValue;
-				const cellData = mazeData[row]?.[col];
-
-				if (cellData) {
-					rowArr.push(
-						<Cell
-							type={cellData.type}
-							xPos={xPos}
-							yPos={yPos}
-							key={`${row}-${col}`}
-							onClick={() => {
-								handleCellClick(row, col);
-							}}
-						/>
-					);
-				}
+				rowArr.push(
+					<Cell
+						row={row}
+						col={col}
+						xPos={col * CELL_WIDTH}
+						yPos={adjustedRowValue}
+						key={`${row}-${col}`}
+						onClick={() => handleCellClick(row, col)}
+					/>
+				);
 			}
 			cellsArray.push(rowArr);
 		}
 		return cellsArray;
-	}, [mazeRows, mazeCols, mazeData, handleCellClick, CELL_WIDTH]);
+	}, [mazeRows, mazeCols, handleCellClick, CELL_WIDTH]);
 
 	return (
 		<div
