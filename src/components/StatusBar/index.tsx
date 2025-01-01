@@ -44,6 +44,9 @@ function RightContent() {
 		finishNodeSearchRunning,
 		pathConnectionRunning,
 		wasPathFound,
+		totalCells,
+		mazeRows,
+		mazeCols,
 	} = useAppStore();
 
 	const [visualizationStatus, setVisualizationStatus] = useState("");
@@ -82,6 +85,8 @@ function RightContent() {
 			</div>
 			{currentTool && <div>{currentTool} Tool</div>}
 			<div>{currentAlgo.sName}</div>
+			<div>{totalCells > 0 && `${totalCells} cells`}</div>
+			<div>{mazeRows > 0 && mazeCols > 0 && `${mazeCols}x${mazeRows} maze`}</div>
 		</div>
 	);
 }

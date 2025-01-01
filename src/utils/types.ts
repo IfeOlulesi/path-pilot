@@ -49,6 +49,10 @@ export interface AppStoreProps {
 	finishNodeSearchRunning: boolean;
 	pathConnectionRunning: boolean;
 	wasPathFound: boolean | null;
+	totalCells: number;
+	mazeRows: number;
+	mazeCols: number;
+
 
 	// actions
 	initializeMaze: () => void;
