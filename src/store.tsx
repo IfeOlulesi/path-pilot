@@ -13,9 +13,9 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 	DRAWER_WIDTH: 200,
 	NAVBAR_HEIGHT: 65,
 	STATUS_BAR_HEIGHT: 65,
-	CELL_WIDTH: 50, // infer that each cell is a square
-	VISITED_CELL_DELAY: 1,
-	PATH_CELL_DELAY: 1,
+	CELL_WIDTH: 40, // infer that each cell is a square
+	VISITED_CELL_DELAY: 0.5,
+	PATH_CELL_DELAY: 0.1,
 
 	// variables
   totalCells: 0,
