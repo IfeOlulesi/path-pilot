@@ -1,5 +1,5 @@
 import theme from "@/utils/theme";
-import PropTypes from "prop-types";
+
 
 export default function MyFAB({
 	activeIcon,

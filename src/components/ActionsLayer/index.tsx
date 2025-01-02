@@ -14,11 +14,15 @@ export default function ActionsLayer() {
 	const [menuContent, setMenuContent] = useState<string[] | null>(null);
 	const { setCurrentTool } = useAppStore();
 
-	const primFabIcon = showButtons ? (
-		<X color={theme.lightMode.white} size={30} />
-	) : (
-		<PathPilotLogoMini color={theme.lightMode.white} scale={1} />
-	);
+	const PrimFabIcon = ({ scale = 1 }: { scale: number }) => {
+		if (showButtons) {
+			return <X color={theme.lightMode.white} size={30 * scale} />;
+		} else {
+			return (
+				<PathPilotLogoMini color={theme.lightMode.white} scale={1 * scale} />
+			);
+		}
+	};
 
 	const handleShowButtons = () => {
 		setShowButtons(!showButtons);
@@ -47,18 +51,39 @@ export default function ActionsLayer() {
 	return (
 		<div className="absolute bottom-0 right-0 bg-red-500/0">
 			<div className="absolute bottom-0 right-0 px-4 py-10">
-				<div className="flex flex-col gap-2 pb-4 items-center">
-					<ShowSecondaryFABs
-						showButtons={showButtons}
-						handleClickAction={handleClickAction}
-					/>
-				</div>
 				<>
-					<MyFAB
-						inactiveIcon={primFabIcon}
-						onClick={handleShowButtons}
-						size="lg"
-					/>
+					<div className="flex sm:hidden flex-col gap-2 pb-4 items-center">
+						<ShowSecondaryFABs
+							showButtons={showButtons}
+							handleClickAction={handleClickAction}
+							fabSizes="sm"
+              fabIconSize={15}
+						/>
+					</div>
+					<div className="hidden sm:flex flex-col gap-2 pb-4 items-center">
+						<ShowSecondaryFABs
+							showButtons={showButtons}
+							handleClickAction={handleClickAction}
+							fabSizes="md"
+              fabIconSize={20}
+						/>
+					</div>
+				</>
+				<>
+					<div className="hidden sm:flex">
+						<MyFAB
+							inactiveIcon={<PrimFabIcon scale={1} />}
+							onClick={handleShowButtons}
+							size="lg"
+						/>
+					</div>
+					<div className="flex sm:hidden">
+						<MyFAB
+							inactiveIcon={<PrimFabIcon scale={0.8} />}
+							onClick={handleShowButtons}
+							size="md"
+						/>
+					</div>
 				</>
 			</div>
 		</div>
@@ -68,9 +93,13 @@ export default function ActionsLayer() {
 function ShowSecondaryFABs({
 	showButtons,
 	handleClickAction,
+	fabSizes,
+  fabIconSize,
 }: {
 	showButtons: boolean;
 	handleClickAction: (action: any) => void;
+	fabSizes: "sm" | "md" | "lg";
+  fabIconSize: number;
 }) {
 	const { setCurrentAlgo, currentTool, visualizationRunning } = useAppStore();
 
@@ -79,51 +108,51 @@ function ShowSecondaryFABs({
 		border: true,
 		borderColor: theme.lightMode.white,
 		type: "tool",
-    isActive: !visualizationRunning,
+		isActive: !visualizationRunning,
 	};
 
 	const secActions = [
 		{
 			...modelSecToolFab,
-			activeIcon: <BrickWall color={theme.lightMode.primary} size={20} />,
-			inactiveIcon: <BrickWall color={theme.lightMode.white} size={20} />,
+			activeIcon: <BrickWall color={theme.lightMode.primary} size={fabIconSize} />,
+			inactiveIcon: <BrickWall color={theme.lightMode.white} size={fabIconSize} />,
 			tool: tools.wall,
 			tooltipText: "Wall tool",
-      isSelected: currentTool === tools.wall,
+			isSelected: currentTool === tools.wall,
 		},
 		{
 			...modelSecToolFab,
-			activeIcon: <Eraser color={theme.lightMode.primary} size={20} />,
-			inactiveIcon: <Eraser color={theme.lightMode.white} size={20} />,
+			activeIcon: <Eraser color={theme.lightMode.primary} size={fabIconSize} />,
+			inactiveIcon: <Eraser color={theme.lightMode.white} size={fabIconSize} />,
 			tool: tools.eraser,
 			tooltipText: "Eraser tool",
-      isSelected: currentTool === tools.eraser,
+			isSelected: currentTool === tools.eraser,
 		},
 		{
 			...modelSecToolFab,
-			activeIcon: <MapPin color={theme.lightMode.primary} size={20} />,
-			inactiveIcon: <MapPin color={theme.lightMode.white} size={20} />,
+			activeIcon: <MapPin color={theme.lightMode.primary} size={fabIconSize} />,
+			inactiveIcon: <MapPin color={theme.lightMode.white} size={fabIconSize} />,
 			tool: tools.begin,
 			tooltipText: "Begin tool",
-      isSelected: currentTool === tools.begin,
+			isSelected: currentTool === tools.begin,
 		},
 		{
 			...modelSecToolFab,
-			activeIcon: <Flag color={theme.lightMode.primary} size={20} />,
-			inactiveIcon: <Flag color={theme.lightMode.white} size={20} />,
+			activeIcon: <Flag color={theme.lightMode.primary} size={fabIconSize} />,
+			inactiveIcon: <Flag color={theme.lightMode.white} size={fabIconSize} />,
 			tool: tools.finish,
 			tooltipText: "Finish tool",
-      isSelected: currentTool === tools.finish,
+			isSelected: currentTool === tools.finish,
 		},
 		{
 			...modelSecToolFab,
-			activeIcon: <Cpu color={theme.lightMode.primary} size={20} />,
-			inactiveIcon: <Cpu color={theme.lightMode.white} size={20} />,
+			activeIcon: <Cpu color={theme.lightMode.primary} size={fabIconSize} />,
+			inactiveIcon: <Cpu color={theme.lightMode.white} size={fabIconSize} />,
 			type: "menu",
 			fn: "set-algo",
 			menu: Object.keys(algorithms),
 			tooltipText: "Select Algorithm",
-      isSelected: false
+			isSelected: false,
 		},
 	];
 
@@ -138,11 +167,12 @@ function ShowSecondaryFABs({
 									<MyFAB
 										activeIcon={action.activeIcon}
 										inactiveIcon={action.inactiveIcon}
-										isSelected={action.isSelected} 
+										isSelected={action.isSelected}
 										onClick={() => handleClickAction(action)}
 										key={index}
 										tooltipText={action.tooltipText}
-                    isActive={action.isActive}
+										isActive={action.isActive}
+										size={fabSizes}
 									/>
 								}
 								menu={"menu" in action ? action.menu : undefined}
@@ -155,11 +185,12 @@ function ShowSecondaryFABs({
 							<MyFAB
 								activeIcon={action.activeIcon}
 								inactiveIcon={action.inactiveIcon}
-								isSelected={action.isSelected} 
+								isSelected={action.isSelected}
 								onClick={() => handleClickAction(action)}
 								key={index}
 								tooltipText={action.tooltipText}
-                isActive={action.isActive}
+								isActive={action.isActive}
+								size={fabSizes}
 							/>
 						);
 					}
