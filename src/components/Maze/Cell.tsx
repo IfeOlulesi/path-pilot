@@ -1,17 +1,29 @@
 /* eslint-disable react/no-unknown-property */
-import { useRef } from "react";
+import { memo, useRef } from "react";
 import { Rect } from "react-konva";
 import { useAppStore } from "@/store";
 import { cells } from "@/utils/constants";
-import { KonvaEventObject } from 'konva/lib/Node';
+import { KonvaEventObject } from "konva/lib/Node";
 
-export default function Cell({ xPos, yPos, type, onClick }: CellProps) {
+const Cell = ({ xPos, yPos, row, col, onClick }: CellProps) => {
 	const isMouseDown = useRef(false);
-	const { CELL_WIDTH } = useAppStore();
+	const CELL_WIDTH = useAppStore((state) => state.CELL_WIDTH);
+	const visualizationRunning = useAppStore(
+		(state) => state.visualizationRunning
+	);
+
+  // INFO: These 2 lines make the cell performance great for mouse interactions
+	const cellData = useAppStore((state) => state.mazeData[row]?.[col]);
+	const cellColor =
+		cells[cellData?.type?.toLowerCase() as keyof typeof cells]?.color ||
+		"white";
+
 
 	const handleMouseDown = () => {
-		isMouseDown.current = true;
-    onClick();
+		if (!visualizationRunning) {
+			isMouseDown.current = true;
+			onClick();
+		}
 	};
 
 	const handleMouseUp = (event: KonvaEventObject<MouseEvent>) => {
@@ -19,9 +31,11 @@ export default function Cell({ xPos, yPos, type, onClick }: CellProps) {
 	};
 
 	const handleMouseEnter = (event: KonvaEventObject<MouseEvent>) => {
-		if (event.evt.buttons === 1) {	
+		if (event.evt.buttons === 1 && !visualizationRunning) {
 			// 1 indicates the primary button (usually the left button) is pressed
-			onClick();
+			if (!visualizationRunning) {
+				onClick();
+			}
 		}
 	};
 
@@ -31,8 +45,7 @@ export default function Cell({ xPos, yPos, type, onClick }: CellProps) {
 			y={yPos}
 			width={CELL_WIDTH}
 			height={CELL_WIDTH}
-			fill={cells[type.toLowerCase() as keyof typeof cells].color}
-			onClick={onClick}
+			fill={cellColor}
 			onMouseDown={handleMouseDown}
 			onMouseUp={handleMouseUp}
 			onMouseEnter={handleMouseEnter}
@@ -40,11 +53,16 @@ export default function Cell({ xPos, yPos, type, onClick }: CellProps) {
 			strokeWidth={0.2}
 		/>
 	);
-}
+};
+
+export const MemoizedCell = memo(Cell);
+
+export default Cell;
 
 interface CellProps {
 	xPos: number;
 	yPos: number;
-	type: string;
+	row: number;
+	col: number;
 	onClick: () => void;
 }

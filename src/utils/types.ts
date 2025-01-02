@@ -30,6 +30,8 @@ export interface AppStoreProps {
 	NAVBAR_HEIGHT: number;
 	STATUS_BAR_HEIGHT: number;
 	CELL_WIDTH: number;
+	VISITED_CELL_DELAY: number;
+	PATH_CELL_DELAY: number;
 
 	// variables
 	startPos: { row: number; col: number } | null;
@@ -43,6 +45,14 @@ export interface AppStoreProps {
 	>;
 	currentTool: string;
 	currentAlgo: Algorithm;
+	visualizationRunning: boolean;
+	finishNodeSearchRunning: boolean;
+	pathConnectionRunning: boolean;
+	wasPathFound: boolean | null;
+	totalCells: number;
+	mazeRows: number;
+	mazeCols: number;
+
 
 	// actions
 	initializeMaze: () => void;
@@ -50,5 +60,5 @@ export interface AppStoreProps {
 	setCurrentTool: (tool: string) => void;
 	setCurrentAlgo: (algo: Algorithm) => void;
 	findShortestPath: () => void;
+	prepMazeForNewVisualization: () => void;
 }
-

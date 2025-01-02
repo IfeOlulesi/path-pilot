@@ -1,46 +1,63 @@
-import { tools } from "./constants";
+import { cells } from "./constants";
 import {
 	CellCoordinatesArr,
 	CellCoordinatesObj,
 	ReconstructPathParams,
 } from "./types";
 
-function bfs(
+async function bfs(
 	start: CellCoordinatesArr,
 	end: CellCoordinatesArr,
-	maze: CellCoordinatesObj[][]
+	maze: CellCoordinatesObj[][],
+	onVisit: (cell: CellCoordinatesArr) => Promise<void>,
+	onPathFound: (path: CellCoordinatesArr[]) => Promise<void>,
+	onPathNotFound: () => void
 ) {
+
+	let iterationCount = 0; 
 	var queue = [start];
 	var visitedCells = new Set<string>();
 	var predecessors = new Map<string, string>();
 
 	while (queue.length > 0) {
+		iterationCount++; 
 		let current = queue.shift();
 		if (current === undefined) {
 			throw new Error("Current cell is undefined");
 		}
 
-		// INFO: Destination node found
-		if (JSON.stringify(current) === JSON.stringify(end)) {
-			return reconstructPath({ predecessors, start, end });
+		// Measure string conversion 
+		const isEnd = JSON.stringify(current) === JSON.stringify(end);
+
+		if (isEnd) { 
+			const path = reconstructPath({ predecessors, start, end });
+			await onPathFound(path);
+      console.log(iterationCount)
+			return true;
 		}
 
-		visitedCells.add(JSON.stringify(current));
+		const currentStr = JSON.stringify(current);
+ 
+		// if (!visitedCells.has(currentStr)) {
+    //   await onVisit(current);
+		// }
+    
+    visitedCells.add(currentStr);
 		const neighboursArr = getNeighbours(current, maze);
+    await onVisit(current)
 
-		// INFO: Explore the neighbors of current node
+    // INFO: Explore the neighbors of current node
 		for (let neighbour of neighboursArr) {
 			const hasCellBeenVisited = visitedCells.has(JSON.stringify(neighbour));
-
-			if (!hasCellBeenVisited) {
-				queue.push(neighbour);
-				visitedCells.add(JSON.stringify(neighbour)); // wondering why this line tho
-				predecessors.set(JSON.stringify(neighbour), JSON.stringify(current)); // document the route to this node/cell
-			}
+      if (!hasCellBeenVisited) {
+        queue.push(neighbour);
+        visitedCells.add(JSON.stringify(neighbour)); // wondering why this line tho
+        predecessors.set(JSON.stringify(neighbour), JSON.stringify(current)); // document the route to this node/cell
+      }
 		}
 	}
 
-	// no path found
+	onPathNotFound();
 	return false;
 }
 
@@ -80,7 +97,7 @@ function getNeighbours(cell: [number, number], maze: CellCoordinatesObj[][]) {
 				const targetRow = targetNeighbour[0];
 				const targetCol = targetNeighbour[1];
 
-				if (maze[targetRow][targetCol].type !== tools.wall) {
+				if (maze[targetRow][targetCol].type !== cells.wall.name) {
 					// INFO: Gaurd against wall cells
 					neighbours.push(targetNeighbour);
 				}
