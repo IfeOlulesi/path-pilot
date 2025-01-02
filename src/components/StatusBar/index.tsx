@@ -24,7 +24,7 @@ function LeftContent() {
 	return (
 		<div className="flex flex-row gap-4">
 			{cellsArr.map((cell: keyof typeof cells, index) => (
-				<div key={index} className="flex items-center gap-2">
+				<div key={index} className="hidden md:flex items-center gap-2">
 					<div
 						className={`w-3.5 h-3.5`}
 						style={{ backgroundColor: cells[cell].color }}
