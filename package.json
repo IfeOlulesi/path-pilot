@@ -1,5 +1,6 @@
 {
   "name": "path-pilot",
+  "homepage": "https://ifeolulesi.github.io/path-pilot/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,12 +8,15 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@react-three/drei": "^9.117.1",
     "@react-three/fiber": "^8.17.10",
+    "gh-pages": "^6.3.0",
     "konva": "^9.3.16",
     "lucide-react": "^0.460.0",
     "react": "^18.3.1",
