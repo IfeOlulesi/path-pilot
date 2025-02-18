@@ -51,24 +51,14 @@ export default function ActionsLayer() {
 	return (
 		<div className="absolute bottom-0 right-0 bg-red-500/0">
 			<div className="absolute bottom-0 right-0 px-4 py-10">
-				<>
-					<div className="flex sm:hidden flex-col gap-2 pb-4 items-center">
-						<ShowSecondaryFABs
-							showButtons={showButtons}
-							handleClickAction={handleClickAction}
-							fabSizes="sm"
-              fabIconSize={15}
-						/>
-					</div>
-					<div className="hidden sm:flex flex-col gap-2 pb-4 items-center">
-						<ShowSecondaryFABs
-							showButtons={showButtons}
-							handleClickAction={handleClickAction}
-							fabSizes="md"
-              fabIconSize={20}
-						/>
-					</div>
-				</>
+				<div className="flex flex-col gap-2 pb-4 items-center">
+					<ShowSecondaryFABs
+						showButtons={showButtons}
+						handleClickAction={handleClickAction}
+						fabSizes="md"
+						fabIconSize={20}
+					/>
+				</div>
 				<>
 					<div className="hidden sm:flex">
 						<MyFAB
@@ -94,12 +84,12 @@ function ShowSecondaryFABs({
 	showButtons,
 	handleClickAction,
 	fabSizes,
-  fabIconSize,
+	fabIconSize,
 }: {
 	showButtons: boolean;
 	handleClickAction: (action: any) => void;
 	fabSizes: "sm" | "md" | "lg";
-  fabIconSize: number;
+	fabIconSize: number;
 }) {
 	const { setCurrentAlgo, currentTool, visualizationRunning } = useAppStore();
 
@@ -114,8 +104,12 @@ function ShowSecondaryFABs({
 	const secActions = [
 		{
 			...modelSecToolFab,
-			activeIcon: <BrickWall color={theme.lightMode.primary} size={fabIconSize} />,
-			inactiveIcon: <BrickWall color={theme.lightMode.white} size={fabIconSize} />,
+			activeIcon: (
+				<BrickWall color={theme.lightMode.primary} size={fabIconSize} />
+			),
+			inactiveIcon: (
+				<BrickWall color={theme.lightMode.white} size={fabIconSize} />
+			),
 			tool: tools.wall,
 			tooltipText: "Wall tool",
 			isSelected: currentTool === tools.wall,
