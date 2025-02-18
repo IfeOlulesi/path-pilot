@@ -2,6 +2,7 @@ import PathPilotLogo from "@/assets/PathPilotLogo";
 import { useAppStore } from "@/store";
 import theme from "@/utils/theme";
 import { RotateCcw, Play } from "lucide-react";
+import { toast } from "react-toastify";
 
 export default function TopNav() {
 	const {
@@ -17,11 +18,11 @@ export default function TopNav() {
 		if (!visualizationRunning) {
 			// INFO: Gaurd clause to check if start and end pos are valid
 			if (startPos === null && endPos === null) {
-				alert("Choose starting and ending point");
+				toast.warn("Choose starting and ending point");
 			} else if (startPos === null) {
-				alert("Choose starting point");
+				toast.warn("Choose starting point");
 			} else if (endPos === null) {
-				alert("Choose ending point");
+				toast.warn("Choose ending point");
 			} else {
 				prepMazeForNewVisualization();
 				findShortestPath();
