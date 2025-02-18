@@ -5,55 +5,53 @@ import {
 	ReconstructPathParams,
 } from "./types";
 
-async function bfs(
+async function algoFS(
 	start: CellCoordinatesArr,
 	end: CellCoordinatesArr,
 	maze: CellCoordinatesObj[][],
+	algo: "bfs" | "dfs",
 	onVisit: (cell: CellCoordinatesArr) => Promise<void>,
 	onPathFound: (path: CellCoordinatesArr[]) => Promise<void>,
 	onPathNotFound: () => void
 ) {
-
-	let iterationCount = 0; 
+	let iterationCount = 0;
 	var queue = [start];
 	var visitedCells = new Set<string>();
 	var predecessors = new Map<string, string>();
 
 	while (queue.length > 0) {
-		iterationCount++; 
-		let current = queue.shift();
+		iterationCount++;
+		let current = algo === "dfs" ? queue.pop() : queue.shift();
 		if (current === undefined) {
 			throw new Error("Current cell is undefined");
 		}
 
-		// Measure string conversion 
+		// Measure string conversion
 		const isEnd = JSON.stringify(current) === JSON.stringify(end);
 
-		if (isEnd) { 
+		if (isEnd) {
 			const path = reconstructPath({ predecessors, start, end });
 			await onPathFound(path);
-      console.log(iterationCount)
+			console.log(iterationCount);
 			return true;
 		}
 
 		const currentStr = JSON.stringify(current);
- 
-		// if (!visitedCells.has(currentStr)) {
-    //   await onVisit(current);
-		// }
-    
-    visitedCells.add(currentStr);
+		visitedCells.add(currentStr);
 		const neighboursArr = getNeighbours(current, maze);
-    await onVisit(current)
+		await onVisit(current);
 
-    // INFO: Explore the neighbors of current node
+		// INFO: Explore the neighbors of current node
 		for (let neighbour of neighboursArr) {
-			const hasCellBeenVisited = visitedCells.has(JSON.stringify(neighbour));
-      if (!hasCellBeenVisited) {
-        queue.push(neighbour);
-        visitedCells.add(JSON.stringify(neighbour)); // wondering why this line tho
-        predecessors.set(JSON.stringify(neighbour), JSON.stringify(current)); // document the route to this node/cell
-      }
+			const neighbourStr = JSON.stringify(neighbour);
+			const hasCellBeenVisited = visitedCells.has(neighbourStr);
+			if (!hasCellBeenVisited) {
+				queue.push(neighbour);
+				predecessors.set(neighbourStr, currentStr);
+				if (algo === "dfs") {
+					break;
+				}
+			}
 		}
 	}
 
@@ -85,21 +83,19 @@ function getNeighbours(cell: [number, number], maze: CellCoordinatesObj[][]) {
 	const WC = [row, col - 1] as CellCoordinatesArr;
 	const EC = [row, col + 1] as CellCoordinatesArr;
 
-	const allNeighbours = [NC, WC, EC, SC];
+	const allNeighbours = [NC, EC, SC, WC];
 
-	for (const neighbour in allNeighbours) {
-		const targetNeighbour = allNeighbours[neighbour];
-
+	for (const neighbour of allNeighbours) {
 		// INFO: Gaurd against invalid indexes, ensure all indexes >= 0
-		if (targetNeighbour[0] >= 0 && targetNeighbour[1] >= 0) {
+		if (neighbour[0] >= 0 && neighbour[1] >= 0) {
 			// INFO: Gaurd against out-of-range indexes i.e. index < elements in array
-			if (targetNeighbour[0] < rowMax && targetNeighbour[1] < colMax) {
-				const targetRow = targetNeighbour[0];
-				const targetCol = targetNeighbour[1];
+			if (neighbour[0] < rowMax && neighbour[1] < colMax) {
+				const targetRow = neighbour[0];
+				const targetCol = neighbour[1];
 
 				if (maze[targetRow][targetCol].type !== cells.wall.name) {
 					// INFO: Gaurd against wall cells
-					neighbours.push(targetNeighbour);
+					neighbours.push(neighbour);
 				}
 			}
 		}
@@ -129,8 +125,4 @@ function reconstructPath({
 	return path;
 }
 
-function dfs() {
-	console.log("DFS coming soon....");
-}
-
-export { bfs, dfs };
+export { algoFS };

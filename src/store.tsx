@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { tools, algorithms, cells } from "@/utils/constants";
-import { bfs } from "./utils/algos";
+import { algoFS } from "./utils/algos";
 import {
 	CellCoordinatesArr,
 	AppStoreProps,
@@ -18,9 +18,9 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 	PATH_CELL_DELAY: 0.1,
 
 	// variables
-  totalCells: 0,
-  mazeRows: 0,
-  mazeCols: 0,
+	totalCells: 0,
+	mazeRows: 0,
+	mazeCols: 0,
 	startPos: null,
 	endPos: null,
 	mazeData: [],
@@ -33,7 +33,7 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 	wasPathFound: null,
 
 	// actions
-	initializeMaze: () => 
+	initializeMaze: () =>
 		set((state: AppStoreProps) => {
 			// INFO: Reset all variables
 			set(() => ({
@@ -72,7 +72,7 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 				mazeCols,
 			};
 		}),
-    
+
 	updateCell: (row: number, col: number, updates: Updates) =>
 		set((state: AppStoreProps) => {
 			const newMazeData = [...state.mazeData];
@@ -132,13 +132,20 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 			}));
 
 			// Guard clause - tho it should never hit since it's checked in the UI
+			// Leaving it to make TS happy
 			if (state.startPos === null || state.endPos === null) {
 				alert("Choose starting and ending point");
 				return { mazeData: state.mazeData };
 			}
 
-			const startPosArr: CellCoordinatesArr = [state.startPos.row, state.startPos.col];
-			const endPosArr: CellCoordinatesArr = [state.endPos.row, state.endPos.col];
+			const startPosArr: CellCoordinatesArr = [
+				state.startPos.row,
+				state.startPos.col,
+			];
+			const endPosArr: CellCoordinatesArr = [
+				state.endPos.row,
+				state.endPos.col,
+			];
 
 			const onVisitHandler = (cell: CellCoordinatesArr) => {
 				return new Promise<void>((resolve) => {
@@ -152,7 +159,8 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 								if (
 									cell !== null &&
 									state.startPos !== null &&
-									(cell[0] !== state.startPos.row || cell[1] !== state.startPos.col)
+									(cell[0] !== state.startPos.row ||
+										cell[1] !== state.startPos.col)
 								) {
 									newMazeData[cell[0]][cell[1]] = {
 										type: cells.visited.name,
@@ -180,7 +188,7 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 				}));
 
 				const pathWithoutStartEnd = path.slice(1, -1);
-				
+
 				return new Promise<void>((resolve) => {
 					let currentIndex = 0;
 					const startTime = performance.now();
@@ -233,14 +241,17 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 				finishNodeSearchRunning: true,
 			}));
 
-			bfs(
-				startPosArr,
-				endPosArr,
-				state.mazeData,
-				onVisitHandler,
-				onPathFoundHandler,
-				onPathNotFoundHandler
-			);
+			if (state.currentAlgo.key === "bfs" || state.currentAlgo.key === "dfs") {
+				algoFS(
+					startPosArr,
+					endPosArr,
+					state.mazeData,
+					state.currentAlgo.key,
+					onVisitHandler,
+					onPathFoundHandler,
+					onPathNotFoundHandler
+				);
+			}
 
 			return { mazeData: state.mazeData };
 		}),

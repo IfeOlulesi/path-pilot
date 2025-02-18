@@ -12,12 +12,11 @@ const Cell = ({ xPos, yPos, row, col, onClick }: CellProps) => {
 		(state) => state.visualizationRunning
 	);
 
-  // INFO: These 2 lines make the cell performance great for mouse interactions
+	// INFO: These 2 lines make the cell performance great for mouse interactions
 	const cellData = useAppStore((state) => state.mazeData[row]?.[col]);
 	const cellColor =
 		cells[cellData?.type?.toLowerCase() as keyof typeof cells]?.color ||
 		"white";
-
 
 	const handleMouseDown = () => {
 		if (!visualizationRunning) {
@@ -31,12 +30,14 @@ const Cell = ({ xPos, yPos, row, col, onClick }: CellProps) => {
 	};
 
 	const handleMouseEnter = (event: KonvaEventObject<MouseEvent>) => {
+		// 1 indicates the primary button (usually the left button) is pressed
 		if (event.evt.buttons === 1 && !visualizationRunning) {
-			// 1 indicates the primary button (usually the left button) is pressed
-			if (!visualizationRunning) {
-				onClick();
-			}
+			onClick();
 		}
+	};
+
+	const handleTouchMove = (event: KonvaEventObject<TouchEvent>) => {
+		if (!visualizationRunning) onClick();
 	};
 
 	return (
@@ -49,6 +50,9 @@ const Cell = ({ xPos, yPos, row, col, onClick }: CellProps) => {
 			onMouseDown={handleMouseDown}
 			onMouseUp={handleMouseUp}
 			onMouseEnter={handleMouseEnter}
+			onTap={handleMouseDown}
+			onTouchStart={handleMouseDown}
+			onTouchMove={handleTouchMove}
 			stroke={"black"}
 			strokeWidth={0.2}
 		/>
