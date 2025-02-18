@@ -10,7 +10,7 @@ import {
 
 export const useAppStore = create<AppStoreProps>()((set) => ({
 	// constants - should probably move them to constants.ts
-	DRAWER_WIDTH: 200,
+	DRAWER_WIDTH: 100,
 	NAVBAR_HEIGHT: 65,
 	STATUS_BAR_HEIGHT: 65,
 	CELL_WIDTH: 40, // infer that each cell is a square

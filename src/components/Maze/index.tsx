@@ -17,11 +17,16 @@ export default function Maze() {
 		initializeMaze,
 	} = useAppStore();
 
+	debugger;
 	const MAZE_WIDTH = window.innerWidth - DRAWER_WIDTH;
 	const MAZE_HEIGHT = window.innerHeight - NAVBAR_HEIGHT - STATUS_BAR_HEIGHT;
 
 	const mazeRows = Math.floor(MAZE_HEIGHT / CELL_WIDTH);
 	const mazeCols = Math.floor(MAZE_WIDTH / CELL_WIDTH);
+
+	// Calculate adjusted maze width and height
+	const adjustedMazeWidth = mazeCols * CELL_WIDTH;
+	const adjustedMazeHeight = mazeRows * CELL_WIDTH;
 
 	useEffect(() => {
 		if (mazeData.length === 0) {
@@ -69,7 +74,7 @@ export default function Maze() {
 			id="canvas-container"
 			className="bg-[#F9FAFB] w-full flex items-center justify-center"
 		>
-			<Stage width={MAZE_WIDTH} height={MAZE_HEIGHT}>
+			<Stage width={adjustedMazeWidth} height={adjustedMazeHeight}>
 				<Layer on>{cells}</Layer>
 			</Stage>
 		</div>
