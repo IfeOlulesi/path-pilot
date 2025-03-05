@@ -7,10 +7,12 @@ import {
 	Updates,
 	Algorithm,
 } from "./utils/types";
+import { toast } from "react-toastify";
+
 
 export const useAppStore = create<AppStoreProps>()((set) => ({
 	// constants - should probably move them to constants.ts
-	DRAWER_WIDTH: 200,
+	DRAWER_WIDTH: 100,
 	NAVBAR_HEIGHT: 65,
 	STATUS_BAR_HEIGHT: 65,
 	CELL_WIDTH: 40, // infer that each cell is a square
@@ -133,7 +135,7 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 
 			// Guard clause - tho it should never hit since it's checked in the UI
 			if (state.startPos === null || state.endPos === null) {
-				alert("Choose starting and ending point");
+				toast.warn("Choose start and end point")
 				return { mazeData: state.mazeData };
 			}
 
@@ -173,7 +175,8 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 			};
 
 			const onPathFoundHandler = (path: CellCoordinatesArr[]) => {
-				set(() => ({
+				toast.success("Path found")
+        set(() => ({
 					...state,
 					finishNodeSearchRunning: false,
 					pathConnectionRunning: true,
@@ -219,6 +222,7 @@ export const useAppStore = create<AppStoreProps>()((set) => ({
 			};
 
 			const onPathNotFoundHandler = () => {
+        toast.info("No path found. End point not reacheable from start point.")
 				set(() => ({
 					...state,
 					visualizationRunning: false,

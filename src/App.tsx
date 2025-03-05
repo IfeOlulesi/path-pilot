@@ -4,6 +4,7 @@ import Maze from "@/components/Maze";
 import ActionsLayer from "@/components/ActionsLayer";
 import StatusBar from "./components/StatusBar";
 import theme from "./utils/theme";
+import { ToastContainer } from "react-toastify";
 
 function App() {
 	return (
@@ -16,6 +17,8 @@ function App() {
 				<StatusBar />
 				<ActionsLayer />
 			</div>
+
+      <ToastContainer />
 		</div>
 	);
 }
